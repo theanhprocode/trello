@@ -1,9 +1,4 @@
-import Button from '@mui/material/Button'
-import AccessAlarmIcon from '@mui/icons-material/AccessAlarm'
-import ThreeDRotation from '@mui/icons-material/ThreeDRotation'
-import Typography from '@mui/material/Typography'
 import { useColorScheme } from '@mui/material/styles'
-// import { useMediaQuery } from '@mui/material'
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
@@ -12,6 +7,7 @@ import Select from '@mui/material/Select'
 import LightModeIcon from '@mui/icons-material/LightMode'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest'
+import Container from '@mui/material/Container'
 
 function ModeSelect() {
   const { mode, setMode } = useColorScheme()
@@ -52,36 +48,39 @@ function ModeSelect() {
   )
 }
 
-function ToggleColorMode() {
-
-  const { mode, setMode } = useColorScheme()
-
-  const toggleColorMode = () => {
-    setMode(mode === 'light' ? 'dark' : 'light')
-  }
-
-  return (
-    <Button onClick={toggleColorMode}>
-      Chuyển sang chế độ {mode === 'light' ? 'tối' : 'sáng'}
-    </Button>
-  )
-}
 
 function App() {
 
   return (
-    <>
-      <ModeSelect/>
-      <ToggleColorMode/>
-      <div>theanh</div>
-
-      <Typography variant='h4' color='text.secondary'>theanh1</Typography>
-      <Button variant="text">Text</Button>
-      <Button variant="contained">Contained</Button>
-      <Button variant="outlined">Outlined</Button>
-      <AccessAlarmIcon/>
-      <ThreeDRotation/>
-    </>
+    <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
+      <Box sx={{
+        backgroundColor: 'primary.light',
+        width: '100%',
+        height: (theme) => theme.customStyles.heightSmall,
+        display: 'flex',
+        alignItems: 'center'
+      }}>
+        <ModeSelect/>
+      </Box>
+      <Box sx={{
+        backgroundColor: 'primary.dark',
+        width: '100%',
+        height: (theme) => theme.customStyles.heightLarge,
+        display: 'flex',
+        alignItems: 'center'
+      }}>
+        Board Bar
+      </Box>
+      <Box sx={{
+        backgroundColor: 'primary.main',
+        width: '100%',
+        height: (theme) => `calc(100vh - ${theme.customStyles.heightLarge} - ${theme.customStyles.heightSmall})`,
+        display: 'flex',
+        alignItems: 'center'
+      }}>
+        Board Content
+      </Box>
+    </Container>
   )
 }
 
