@@ -1,12 +1,12 @@
 import { blue } from '@mui/material/colors'
-import { createTheme } from '@mui/material/styles'
+// import { createTheme } from '@mui/material/styles'
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
 
 const theme = extendTheme({
   cssVariables: true,
   customStyles: {
-    heightSmall: '48px',
-    heightLarge: '58px'
+    heightSmall: '58px',
+    heightLarge: '60px'
   },
 
   colorSchemes: {
