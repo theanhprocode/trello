@@ -1,6 +1,7 @@
-import { blue } from '@mui/material/colors'
+import { blue, cyan, deepOrange, orange, teal } from '@mui/material/colors'
 // import { createTheme } from '@mui/material/styles'
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
+import { borderColor } from '@mui/system'
 
 const theme = extendTheme({
   cssVariables: true,
@@ -12,17 +13,56 @@ const theme = extendTheme({
   colorSchemes: {
     light: {
       palette: {
-        mode: 'light',
-        primary: {
-          main: blue[500]
-        }
+        primary: teal,
+        secondary: deepOrange
       }
     },
     dark: {
       palette: {
-        mode: 'dark',
         primary: {
-          main: '#333'
+          main: blue[200]
+        },
+        secondary: orange
+      }
+    }
+  },
+  components: {
+    // Name of the component
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none'
+        }
+      }
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: ({ theme }) => {
+          return {
+            color: theme.palette.primary.main,
+            fontSize: '0.875rem'
+          }
+        }
+      }
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: ({ theme }) => {
+          return {
+            color: theme.palette.primary.main,
+            fontSize: '0.875rem',
+            '.MuiOutlinedInput-notchedOutline': {
+              borderColor: theme.palette.primary.light
+            },
+            '&:hover': {
+              '.MuiOutlinedInput-notchedOutline': {
+                borderColor: theme.palette.primary.main
+              }
+            },
+            '& fieldset': {
+              borderWidth: '1px !important'
+            }
+          }
         }
       }
     }
