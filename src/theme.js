@@ -1,13 +1,18 @@
-import { blue, cyan, deepOrange, orange, teal } from '@mui/material/colors'
+import { blue, deepOrange, orange, teal } from '@mui/material/colors'
 // import { createTheme } from '@mui/material/styles'
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
-import { borderColor, borderRadius, height } from '@mui/system'
 
 const theme = extendTheme({
   cssVariables: true,
   customStyles: {
     heightSmall: '58px',
     heightLarge: '60px'
+  },
+
+  typography: {
+    allVariants: {
+      lineHeight: 'normal'
+    }
   },
 
   colorSchemes: {

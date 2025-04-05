@@ -32,8 +32,8 @@ function Profile() {
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
         >
-          <Avatar 
-            sx={{ width: 30, height: 30 }}
+          <Avatar
+            sx={{ width: 34, height: 34 }}
             alt='Theanh'
             src='https://lh3.googleusercontent.com/ogw/AF2bZyjDCEHr4iqlRuN6gY4Jr_E19PWBAHCQjbdDwt8MYajhzNE=s32-c-mo'
           />
