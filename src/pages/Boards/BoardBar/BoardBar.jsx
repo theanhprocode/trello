@@ -36,7 +36,6 @@ function BoardBar() {
       gap: 2,
       justifyContent: 'space-between',
       overflowX: 'auto',
-      borderBottom: '1px solid #fff',
       bgcolor: (theme) => (theme.palette.mode) === 'dark' ? '#34495e' : '#1676d2'
     }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -87,7 +86,7 @@ function BoardBar() {
           }}
         >Invite</Button>
 
-        <AvatarGroup max={3} sx={{ gap: '10px', '& .MuiAvatar-root': { width: '34px', height: '34px', fontSize: '16px', border: 'none' } }}>
+        <AvatarGroup max={3} sx={{ gap: '10px', '& .MuiAvatar-root': { width: '34px', height: '34px', fontSize: '16px', border: 'none', color: 'white', cursor: 'pointer', '&:first-of-type': { bgcolor: '#a4b0be' } } }}>
           <Tooltip title="theanh">
             <Avatar alt="Theanh" src="https://lh3.googleusercontent.com/ogw/AF2bZyjDCEHr4iqlRuN6gY4Jr_E19PWBAHCQjbdDwt8MYajhzNE=s32-c-mo" />
           </Tooltip>
