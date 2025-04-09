@@ -10,7 +10,6 @@ import AvatarGroup from '@mui/material/AvatarGroup'
 import { Tooltip } from '@mui/material'
 import Button from '@mui/material/Button'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
-import { bgcolor } from '@mui/system'
 
 
 const MENU_STYLE = {
@@ -37,7 +36,6 @@ function BoardBar() {
       gap: 2,
       justifyContent: 'space-between',
       overflowX: 'auto',
-      borderBottom: '1px solid #fff',
       bgcolor: (theme) => (theme.palette.mode) === 'dark' ? '#34495e' : '#1676d2'
     }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
