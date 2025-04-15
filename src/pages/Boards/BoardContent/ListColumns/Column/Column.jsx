@@ -17,9 +17,24 @@ import AddIcon from '@mui/icons-material/Add'
 import Button from '@mui/material/Button'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
 import ListCards from './ListCards/ListCards'
+import { mapOrder } from '~/utilities/sorts'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 
-function Column() {
+function Column({ column }) {
+
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id: column._id,
+    data: { ...column }
+  })
+  const dndkitColumnStyles = {
+    // touchAction:'none',
+    transform: CSS.Translate.toString(transform),
+    transition
+  }
+
+  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
 
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
@@ -31,15 +46,20 @@ function Column() {
   }
 
   return (
-    <Box sx={{
-      minWidth: '300px',
-      maxWidth: '300px',
-      bgcolor: (theme) => (theme.palette.mode) === 'dark' ? '#333643' : '#ebecf0',
-      ml: 2,
-      borderRadius: '6px',
-      height: 'fit-content',
-      maxHeight: (theme) => `calc(${theme.customStyles.boardContentHeight} - ${theme.spacing(5)})`
-    }}>
+    <Box
+      ref={setNodeRef}
+      style={dndkitColumnStyles}
+      {...attributes}
+      {...listeners}
+      sx={{
+        minWidth: '300px',
+        maxWidth: '300px',
+        bgcolor: (theme) => (theme.palette.mode) === 'dark' ? '#333643' : '#ebecf0',
+        ml: 2,
+        borderRadius: '6px',
+        height: 'fit-content',
+        maxHeight: (theme) => `calc(${theme.customStyles.boardContentHeight} - ${theme.spacing(5)})`
+      }}>
       <Box sx={{
         height: (theme) => theme.customStyles.columnHeaderHeight,
         p: 2,
@@ -51,7 +71,7 @@ function Column() {
           fontSize: '1rem',
           fontWeight: 'bold',
           cursor: 'pointer'
-        }}>Column Title</Typography>
+        }}>{column?.title}</Typography>
         <Box>
           <Tooltip title='More option'>
             <ExpandMoreIcon
@@ -101,7 +121,7 @@ function Column() {
         </Box>
       </Box>
       {/* {column list card} */}
-      <ListCards />
+      <ListCards cards={orderedCards} />
 
 
       {/* {column footer} */}
