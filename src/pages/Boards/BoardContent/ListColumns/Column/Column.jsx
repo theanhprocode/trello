@@ -20,7 +20,7 @@ import ListCards from './ListCards/ListCards'
 import { mapOrder } from '~/utilities/sorts'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { height } from '@mui/system'
+import { border, height } from '@mui/system'
 import { Opacity } from '@mui/icons-material'
 
 
