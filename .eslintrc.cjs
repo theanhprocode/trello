@@ -4,7 +4,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
-    'plugin:react-hooks/recommended',
+    'plugin:react-hooks/recommended'
   ],
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   settings: { react: { version: '18.2' } },
@@ -24,6 +24,7 @@ module.exports = {
         'patterns': ['@mui/*/*/*']
       }
     ],
+    'no-extra-boolean-cast': 0,
     'no-console': 1,
     'no-lonely-if': 1,
     'no-unused-vars': 1,
