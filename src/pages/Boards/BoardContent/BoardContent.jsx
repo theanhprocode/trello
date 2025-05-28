@@ -113,7 +113,7 @@ function BoardContent({ board }) {
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map(card => card._id)
 
       }
-      console.log('nextColumns: ', nextColumns)
+      // console.log('nextColumns: ', nextColumns)
 
       return nextColumns
     })
@@ -283,7 +283,7 @@ function BoardContent({ board }) {
         overId = closestCorners({
           ...args,
           droppableContainers: args.droppableContainers.filter(container => {
-            (container.id !== overId) && (checkColumn?.cardOrderIds?.includes(container.id))
+            return (container.id !== overId) && (checkColumn?.cardOrderIds?.includes(container.id))
           })
         })[0]?.id
       }
