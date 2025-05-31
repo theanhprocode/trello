@@ -40,12 +40,14 @@ function BoardBar({ board }) {
       bgcolor: (theme) => (theme.palette.mode) === 'dark' ? '#34495e' : '#1676d2'
     }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <Chip
-          sx={MENU_STYLE}
-          icon={<SpaceDashboardIcon />}
-          label={board?.title}
-          clickable
-        />
+        <Tooltip title={board?.description || 'No description'}>
+          <Chip
+            sx={MENU_STYLE}
+            icon={<SpaceDashboardIcon />}
+            label={board?.title}
+            clickable
+          />
+        </Tooltip>
 
         <Chip
           sx={MENU_STYLE}
