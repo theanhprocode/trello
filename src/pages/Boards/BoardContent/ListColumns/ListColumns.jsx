@@ -14,6 +14,22 @@ function ListColumns({ columns }) {
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
   const toggleNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
 
+  const [newColumnTitle, setNewColumnTitle] = useState('')
+
+  const addNewColumn = () => {
+    if (!newColumnTitle) {
+      console.log('Column title cannot be empty')
+      return
+    }
+    console.log(newColumnTitle)
+
+    // Call API to add new column
+
+    // Reset form
+    toggleNewColumnForm()
+    setNewColumnTitle('')
+  }
+
   // const [searchValue, setSearchValue] = useState('')
 
 
@@ -58,8 +74,8 @@ function ListColumns({ columns }) {
                 size='small'
                 variant='outlined'
                 autoFocus
-                // value={searchValue}
-                // onChange={(e) => setSearchValue(e.target.value)}
+                value={newColumnTitle}
+                onChange={(e) => setNewColumnTitle(e.target.value)}
                 sx={{
                   '& label': { color: 'white' },
                   '& input': { color: 'white' },
@@ -73,8 +89,9 @@ function ListColumns({ columns }) {
               />
               <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                 <Button
+                  onClick={addNewColumn}
                   variant="contained" color="success" size='small'
-                  sx={{ boxShadow: 'none', border: '1px solid', borderColor: (theme) => theme.palette.success.main, '&:hover': { bgcolor: (theme) => theme.palette.success.main } }}
+                  sx={{ height: '30px', boxShadow: 'none', border: '1px solid', borderColor: (theme) => theme.palette.success.main, '&:hover': { bgcolor: (theme) => theme.palette.success.main, boxShadow: '0px 0px 8px rgb(105, 103, 103)' } }}
                 >Add column</Button>
 
                 <CloseIcon onClick={toggleNewColumnForm} fontSize='small' sx={{ color: 'white', cursor: 'pointer', '&:hover': { color: (theme) => theme.palette.warning.light } }} />
