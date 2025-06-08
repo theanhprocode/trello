@@ -7,13 +7,14 @@ import { DndContext,
   pointerWithin,
   useSensor,
   useSensors,
-  MouseSensor,
-  TouchSensor,
+  // MouseSensor,
+  // TouchSensor,
   DragOverlay,
   defaultDropAnimationSideEffects,
   closestCorners,
   // rectIntersection,
   getFirstCollision } from '@dnd-kit/core'
+import { MouseSensor, TouchSensor } from '~/customLibraries/dndKitSensors'
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { arrayMove } from '@dnd-kit/sortable'
 import Column from './ListColumns/Column/Column'

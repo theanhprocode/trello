@@ -180,6 +180,7 @@ function Column({ column }) {
                 size='small'
                 variant='outlined'
                 autoFocus
+                data-no-dnd="true"
                 value={newCardTitle}
                 onChange={(e) => setNewCardTitle(e.target.value)}
                 sx={{
@@ -200,6 +201,7 @@ function Column({ column }) {
                 <Button
                   onClick={addNewCard}
                   variant="contained" color="success" size='small'
+                  data-no-dnd="true"
                   sx={{ height: '30px', boxShadow: 'none', border: '1px solid', borderColor: (theme) => theme.palette.success.main, '&:hover': { bgcolor: (theme) => theme.palette.success.main, boxShadow: '0px 0px 8px rgb(105, 103, 103)' } }}
                 >Add</Button>
 
