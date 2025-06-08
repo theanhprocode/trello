@@ -26,6 +26,7 @@ import { useState } from 'react'
 import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
 import theme from '~/theme'
+import { toast } from 'react-toastify'
 
 
 
@@ -61,7 +62,7 @@ function Column({ column }) {
 
   const addNewCard = () => {
     if (!newCardTitle) {
-      console.log('Card title cannot be empty')
+      toast.error('Card title cannot be empty', { position: 'top-right' })
       return
     }
     console.log(newCardTitle)
@@ -205,7 +206,7 @@ function Column({ column }) {
                   sx={{ height: '30px', boxShadow: 'none', border: '1px solid', borderColor: (theme) => theme.palette.success.main, '&:hover': { bgcolor: (theme) => theme.palette.success.main, boxShadow: '0px 0px 8px rgb(105, 103, 103)' } }}
                 >Add</Button>
 
-                <CloseIcon onClick={toggleNewCardForm} fontSize='small' sx={{ color: (theme) => theme.palette.warning.light, cursor: 'pointer' }} />
+                <CloseIcon onClick={toggleNewCardForm} data-no-dnd="true" fontSize='small' sx={{ color: (theme) => theme.palette.warning.light, cursor: 'pointer' }} />
               </Box>
             </Box>
           }
