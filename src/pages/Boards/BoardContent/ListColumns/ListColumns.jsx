@@ -11,20 +11,25 @@ import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
 
 
-function ListColumns({ columns }) {
+function ListColumns({ columns, createNewColumn, createNewCard }) {
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
   const toggleNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
 
   const [newColumnTitle, setNewColumnTitle] = useState('')
 
-  const addNewColumn = () => {
+  const addNewColumn = async () => {
     if (!newColumnTitle) {
       toast.error('Column title cannot be empty')
       return
     }
-    console.log(newColumnTitle)
+    // console.log(newColumnTitle)
 
     // Call API to add new column
+    const newColumnData = {
+      title: newColumnTitle
+    }
+
+    await createNewColumn(newColumnData)
 
     // Reset form
     toggleNewColumnForm()
@@ -44,7 +49,7 @@ function ListColumns({ columns }) {
           display: 'flex'
         }}>
 
-          {columns?.map(column => <Column key={column._id} column={column} /> )}
+          {columns?.map(column => <Column key={column._id} column={column} createNewCard={createNewCard} /> )}
 
           {!openNewColumnForm
             ? <Box onClick={toggleNewColumnForm} sx={{

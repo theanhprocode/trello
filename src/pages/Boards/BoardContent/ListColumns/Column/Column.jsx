@@ -31,7 +31,7 @@ import { toast } from 'react-toastify'
 
 
 
-function Column({ column }) {
+function Column({ column, createNewCard }) {
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
@@ -60,7 +60,7 @@ function Column({ column }) {
 
   const [newCardTitle, setNewCardTitle] = useState('')
 
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
       toast.error('Card title cannot be empty', { position: 'top-right' })
       return
@@ -68,6 +68,12 @@ function Column({ column }) {
     console.log(newCardTitle)
 
     // Call API to add new Card
+    const newCardData = {
+      title: newCardTitle,
+      columnId: column._id
+    }
+
+    await createNewCard(newCardData)
 
     // Reset form
     toggleNewCardForm()
