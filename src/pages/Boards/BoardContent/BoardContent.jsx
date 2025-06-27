@@ -27,7 +27,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board, createNewColumn, createNewCard }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
   // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
   const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
   const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, distance: 10 } })
@@ -236,14 +236,17 @@ function BoardContent({ board, createNewColumn, createNewCard }) {
       // lấy vị trí mới từ over
       const newColumnIndex = orderedColumns.findIndex(c => c._id === over.id)
       // dnd after
-      const dndorderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex)
+      const dndOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex)
 
       // Use for Database
-      // const dndorderedColumnsIds = dndorderedColumns.map(c => c._id)
+      // const dndOrderedColumnsIds = dndorderedColumns.map(c => c._id)
       // console.log('dndorderedColumns: ', dndorderedColumns)
       // console.log('dndorderedColumnsIds: ', dndorderedColumnsIds)
 
-      setOrderedColumns(dndorderedColumns)
+      // gọi lên próp fn moveColumns ở component cha cao nhất (Boards/_id.jsx)
+      moveColumns(dndOrderedColumns)
+
+      setOrderedColumns(dndOrderedColumns)
     }
 
     setActiveDragItemId(null)
