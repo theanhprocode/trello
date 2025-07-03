@@ -17,18 +17,12 @@ import AddIcon from '@mui/icons-material/Add'
 import Button from '@mui/material/Button'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
 import ListCards from './ListCards/ListCards'
-import { mapOrder } from '~/utilities/sorts'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { border, height } from '@mui/system'
-import { Opacity } from '@mui/icons-material'
 import { useState } from 'react'
 import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
-import theme from '~/theme'
 import { toast } from 'react-toastify'
-
-
 
 
 function Column({ column, createNewCard }) {
@@ -53,19 +47,19 @@ function Column({ column, createNewCard }) {
     setAnchorEl(null)
   }
 
-  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+  const orderedCards = column.cards
 
   const [openNewCardForm, setOpenNewCardForm] = useState(false)
   const toggleNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
 
   const [newCardTitle, setNewCardTitle] = useState('')
 
-  const addNewCard = async () => {
+  const addNewCard = () => {
     if (!newCardTitle) {
       toast.error('Card title cannot be empty', { position: 'top-right' })
       return
     }
-    console.log(newCardTitle)
+    // console.log(newCardTitle)
 
     // Call API to add new Card
     const newCardData = {
@@ -73,7 +67,7 @@ function Column({ column, createNewCard }) {
       columnId: column._id
     }
 
-    await createNewCard(newCardData)
+    createNewCard(newCardData)
 
     // Reset form
     toggleNewCardForm()

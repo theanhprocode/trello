@@ -1,4 +1,3 @@
-import { mapOrder } from '~/utilities/sorts'
 import Box from '@mui/material/Box'
 import ListColumns from './ListColumns/ListColumns'
 import { DndContext,
@@ -27,7 +26,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumns, moveCardInTheSameColumn }) {
   // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
   const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
   const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, distance: 10 } })
@@ -48,7 +47,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
   const lastOverId = useRef(null)
 
   useEffect(() => {
-    setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
+    setOrderedColumns(board.columns)
   }, [board])
 
   // Tìm column theo cardId
@@ -198,6 +197,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
 
       // console.log('oldColumnWhenDraggingCard: ', oldColumnWhenDraggingCard)
       // console.log('overColumn: ', overColumn)
+      // Dnd card giữa 2 column khác nhau
       if (oldColumnWhenDraggingCard._id !== overColumn._id) {
         moveCardBetweenDifferentColumns(overColumn,
           overCardId,
@@ -213,19 +213,22 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
         // lấy vị trí mới từ over
         const newCardIndex = overColumn?.cards?.findIndex(c => c._id === overCardId)
 
-        const dndorderedCard = arrayMove(oldColumnWhenDraggingCard?.cards, oldCardIndex, newCardIndex)
+        const dndOrderedCards = arrayMove(oldColumnWhenDraggingCard?.cards, oldCardIndex, newCardIndex)
+        const dndOrderedCardIds = dndOrderedCards.map(card => card._id)
 
         setOrderedColumns(prevColumns => {
           const nextColumns = cloneDeep(prevColumns)
 
           const targetColumn = nextColumns.find(column => column._id === overColumn._id)
 
-          targetColumn.cards = dndorderedCard
-          targetColumn.cardOrderIds = dndorderedCard.map(card => card._id)
+          targetColumn.cards = dndOrderedCards
+          targetColumn.cardOrderIds = dndOrderedCardIds
           // console.log(targetColumn)
 
           return nextColumns
         })
+
+        moveCardInTheSameColumn(dndOrderedCards, dndOrderedCardIds, oldColumnWhenDraggingCard._id)
       }
     }
 
