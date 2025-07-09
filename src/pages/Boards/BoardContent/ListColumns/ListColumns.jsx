@@ -75,7 +75,7 @@ function ListColumns({ columns, createNewColumn, createNewCard }) {
               gap: 1
             }}>
               <TextField
-                label="Enter column name"
+                label="Enter column name..."
                 type="text"
                 size='small'
                 variant='outlined'
