@@ -26,7 +26,7 @@ import { toast } from 'react-toastify'
 import { useConfirm } from 'material-ui-confirm'
 
 
-function Column({ column, createNewCard }) {
+function Column({ column, createNewCard, deleteColumnDetails }) {
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
@@ -86,9 +86,18 @@ function Column({ column, createNewCard }) {
       confirmationButtonProps: { color: 'error' },
       cancellationButtonProps: { color: 'primary' },
       confirmationKeyword: 'Xoá',
-      description: 'nhập "Xoá" để xác nhận xoá column này'
+      description: 'Nhập "Xoá" để xác nhận xoá column này và tất cả các card bên trong.',
+      dialogProps: {
+        PaperProps: {
+          sx: {
+            '& .MuiDialogContentText-root': {
+              mb: '8px'
+            }
+          }
+        }
+      }
     }).then(() => {
-      console.log('Delete column:', column._id)
+      deleteColumnDetails(column._id)
     }).catch(() => {
       () => {}
     })

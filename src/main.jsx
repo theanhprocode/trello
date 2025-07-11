@@ -11,7 +11,7 @@ import { ConfirmProvider } from 'material-ui-confirm'
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
   <CssVarProvider theme={theme}>
-    <ConfirmProvider>
+    <ConfirmProvider defaultOption={{ dialogProps: { maxWidth: 'xs' } }}>
       <CssBaseline/>
       <App />
       <ToastContainer position="bottom-left" theme="colored"/>
