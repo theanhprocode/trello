@@ -57,14 +57,23 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
 
   const addNewCard = () => {
     if (!newCardTitle) {
-      toast.error('Card title cannot be empty', { position: 'top-right' })
+      toast.error('Card cần có tên', { position: 'top-right' })
       return
     }
-    // console.log(newCardTitle)
+
+    if (newCardTitle.trim().length < 3) {
+      toast.error('Card không thể có tên dưới 3 ký tự', { position: 'top-right' })
+      return
+    }
+
+    if (newCardTitle.trim().length > 256) {
+      toast.error('Card không thể có tên trên 256 ký tự', { position: 'top-right' })
+      return
+    }
 
     // Call API to add new Card
     const newCardData = {
-      title: newCardTitle,
+      title: newCardTitle.trim(),
       columnId: column._id
     }
 

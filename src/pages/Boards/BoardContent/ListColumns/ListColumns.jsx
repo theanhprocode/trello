@@ -19,14 +19,21 @@ function ListColumns({ columns, createNewColumn, createNewCard, deleteColumnDeta
 
   const addNewColumn = () => {
     if (!newColumnTitle) {
-      toast.error('Column title cannot be empty')
+      toast.error('Column cần có tên', { position: 'top-right' })
       return
     }
-    // console.log(newColumnTitle)
+    if (newColumnTitle.trim().length < 3) {
+      toast.error('Column title không thể có tên dưới 3 ký tự', { position: 'top-right' })
+      return
+    }
+    if (newColumnTitle.trim().length > 50) {
+      toast.error('Column không thể có tên trên 50 ký tự', { position: 'top-right' })
+      return
+    }
 
     // Call API to add new column
     const newColumnData = {
-      title: newColumnTitle
+      title: newColumnTitle.trim()
     }
 
     createNewColumn(newColumnData)
