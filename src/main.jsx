@@ -6,13 +6,16 @@ import { Experimental_CssVarsProvider as CssVarProvider } from '@mui/material/st
 import theme from '~/theme'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { ConfirmProvider } from 'material-ui-confirm'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
   <CssVarProvider theme={theme}>
-    <CssBaseline/>
-    <App />
-    <ToastContainer position="bottom-left" theme="colored"/>
+    <ConfirmProvider defaultOption={{ dialogProps: { maxWidth: 'xs' } }}>
+      <CssBaseline/>
+      <App />
+      <ToastContainer position="bottom-left" theme="colored"/>
+    </ConfirmProvider>
   </CssVarProvider>
   // </React.StrictMode>
 )
