@@ -4,7 +4,7 @@ import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '~/apis/mock-data'
-import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI, updateColumnDetailsAPI, moveCardToDifferentColumnAPI, deleteColumnDetailsAPI } from '~/apis'
+import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI, updateColumnDetailsAPI, moveCardToDifferentColumnAPI, deleteColumnDetailsAPI, deleteCardDetailsAPI } from '~/apis'
 import { generatePlaceholderCard } from '~/utilities/formatters'
 import { isEmpty } from 'lodash'
 import { mapOrder } from '~/utilities/sorts'
@@ -155,6 +155,35 @@ function Board() {
     })
   }
 
+  const deleteCardDetails = (cardId) => {
+    // update state board
+    const newBoard = { ...board }
+
+    // Tìm column chứa card cần xóa
+    const columnToUpdate = newBoard.columns.find(column =>
+      column.cards.some(card => card._id === cardId)
+    )
+
+    if (columnToUpdate) {
+      // xóa card khỏi mảng cards
+      columnToUpdate.cards = columnToUpdate.cards.filter(card => card._id !== cardId)
+      // xóa cardId khỏi cardOrderIds
+      columnToUpdate.cardOrderIds = columnToUpdate.cardOrderIds.filter(_id => _id !== cardId)
+
+      // xử lý column rỗng - thêm placeholder card
+      if (isEmpty(columnToUpdate.cards)) {
+        columnToUpdate.cards = [generatePlaceholderCard(columnToUpdate)]
+        columnToUpdate.cardOrderIds = [generatePlaceholderCard(columnToUpdate)._id]
+      }
+    }
+    setBoard(newBoard)
+
+    // gọi API xoá card
+    deleteCardDetailsAPI(cardId).then(res => {
+      toast.success(res?.deleteResult)
+    })
+  }
+
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
 
@@ -169,6 +198,7 @@ function Board() {
         moveCardInTheSameColumn={moveCardInTheSameColumn}
         moveCardToDifferentColumn={moveCardToDifferentColumn}
         deleteColumnDetails={deleteColumnDetails}
+        deleteCardDetails={deleteCardDetails}
       />
 
     </Container>

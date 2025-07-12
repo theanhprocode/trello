@@ -10,8 +10,17 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import DeleteIcon from '@mui/icons-material/Delete'
+import { useState } from 'react'
+import { useConfirm } from 'material-ui-confirm'
 
-function Card({ card }) {
+
+function Card({ card, deleteCardDetails }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: card._id,
     data: { ...card }
@@ -26,6 +35,44 @@ function Card({ card }) {
 
   const shouldShowCardActions = () => {
     return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
+  }
+
+  // Menu dropdown cho card actions
+  const [anchorEl, setAnchorEl] = useState(null)
+  const open = Boolean(anchorEl)
+
+  const handleClick = (event) => {
+    event.stopPropagation() // Ngăn không cho trigger drag
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  const confirmDeleteCard = useConfirm()
+  const handleDeleteCard = () => {
+    confirmDeleteCard({
+      title: 'Xoá card',
+      confirmationText: 'Xoá',
+      cancellationText: 'Huỷ',
+      confirmationButtonProps: { color: 'error' },
+      cancellationButtonProps: { color: 'primary' },
+      description: 'Bạn có chắc muốn xoá card này không?',
+      dialogProps: {
+        PaperProps: {
+          sx: {
+            '& .MuiDialogContentText-root': {
+              mb: '8px'
+            }
+          }
+        }
+      }
+    }).then(() => {
+      deleteCardDetails(card._id)
+    }).catch(() => {
+      () => {}
+    })
   }
 
   return (
@@ -45,9 +92,39 @@ function Card({ card }) {
       }}
     >
       {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} /> }
-
       <CardContent sx={{ p: 1.5, '&:last-child': { p:1.5 } }}>
-        <Typography>{card?.title}</Typography>
+        <Typography sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          {card?.title}
+          <MoreVertIcon
+            onClick={handleClick}
+            sx={{
+              cursor: 'pointer',
+              '&:hover': { color: 'primary.main' }
+            }}
+          />
+        </Typography>
+
+        {/* Menu dropdown */}
+        <Menu
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <MenuItem onClick={handleDeleteCard} sx={{
+            '&:hover': {
+              color: 'error.main',
+              '& .delete-icon': {
+                color: 'error.main'
+              }
+            }
+          }}>
+            <ListItemIcon>
+              <DeleteIcon className="delete-icon" fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Xoá card</ListItemText>
+          </MenuItem>
+        </Menu>
       </CardContent>
       {shouldShowCardActions() &&
         <CardActions sx={{ p: '0 4px 8px 4px' }}>
