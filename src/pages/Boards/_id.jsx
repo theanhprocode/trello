@@ -4,7 +4,7 @@ import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '~/apis/mock-data'
-import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI, updateColumnDetailsAPI, moveCardToDifferentColumnAPI, deleteColumnDetailsAPI, deleteCardDetailsAPI } from '~/apis'
+import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI, updateColumnDetailsAPI, moveCardToDifferentColumnAPI, deleteColumnDetailsAPI, deleteCardDetailsAPI, updateCardTitleAPI } from '~/apis'
 import { generatePlaceholderCard } from '~/utilities/formatters'
 import { isEmpty } from 'lodash'
 import { mapOrder } from '~/utilities/sorts'
@@ -184,6 +184,37 @@ function Board() {
     })
   }
 
+  const updateCardTitle = async (cardId, newTitle) => {
+    // Backup original state for rollback
+    const originalBoard = { ...board }
+
+    try {
+      // update state board (optimistic update)
+      const newBoard = { ...board }
+      const columnToUpdate = newBoard.columns.find(column =>
+        column.cards.some(card => card._id === cardId)
+      )
+
+      if (columnToUpdate) {
+        const cardToUpdate = columnToUpdate.cards.find(card => card._id === cardId)
+        if (cardToUpdate) {
+          cardToUpdate.title = newTitle
+        }
+      }
+      setBoard(newBoard)
+
+      // gọi API cập nhật title
+      await updateCardTitleAPI(cardId, { title: newTitle })
+      toast.success('Card title updated successfully!')
+
+    } catch (error) {
+      // Rollback state on error
+      setBoard(originalBoard)
+      toast.error('Failed to update card title')
+      // console.error('Error updating card title:', error)
+    }
+  }
+
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
 
@@ -199,6 +230,7 @@ function Board() {
         moveCardToDifferentColumn={moveCardToDifferentColumn}
         deleteColumnDetails={deleteColumnDetails}
         deleteCardDetails={deleteCardDetails}
+        updateCardTitle={updateCardTitle}
       />
 
     </Container>
