@@ -26,7 +26,7 @@ import { toast } from 'react-toastify'
 import { useConfirm } from 'material-ui-confirm'
 
 
-function Column({ column, createNewCard, deleteColumnDetails, deleteCardDetails }) {
+function Column({ column, createNewCard, deleteColumnDetails, deleteCardDetails, updateCardTitle }) {
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
@@ -202,7 +202,7 @@ function Column({ column, createNewCard, deleteColumnDetails, deleteCardDetails 
           </Box>
         </Box>
         {/* {column list card} */}
-        <ListCards cards={orderedCards} deleteCardDetails={deleteCardDetails} />
+        <ListCards cards={orderedCards} deleteCardDetails={deleteCardDetails} updateCardTitle={updateCardTitle} />
 
 
         {/* {column footer} */}

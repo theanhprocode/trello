@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
 
 
-function ListColumns({ columns, createNewColumn, createNewCard, deleteColumnDetails, deleteCardDetails }) {
+function ListColumns({ columns, createNewColumn, createNewCard, deleteColumnDetails, deleteCardDetails, updateCardTitle }) {
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
   const toggleNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
 
@@ -56,7 +56,7 @@ function ListColumns({ columns, createNewColumn, createNewCard, deleteColumnDeta
           display: 'flex'
         }}>
 
-          {columns?.map(column => <Column key={column._id} column={column} createNewCard={createNewCard} deleteColumnDetails={deleteColumnDetails} deleteCardDetails={deleteCardDetails} /> )}
+          {columns?.map(column => <Column key={column._id} column={column} createNewCard={createNewCard} deleteColumnDetails={deleteColumnDetails} deleteCardDetails={deleteCardDetails} updateCardTitle={updateCardTitle} /> )}
 
           {!openNewColumnForm
             ? <Box onClick={toggleNewColumnForm} sx={{

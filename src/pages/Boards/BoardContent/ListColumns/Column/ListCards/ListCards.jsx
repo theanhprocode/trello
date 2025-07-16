@@ -3,7 +3,7 @@ import Card from './Card/Card'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 
 
-function ListCards({ cards, deleteCardDetails }) {
+function ListCards({ cards, deleteCardDetails, updateCardTitle }) {
   return (
     <SortableContext items={cards?.map( c => c._id)} strategy={verticalListSortingStrategy}>
       <Box sx={{
@@ -23,7 +23,7 @@ function ListCards({ cards, deleteCardDetails }) {
         '&::-webkit-scrollbar-thumb': { backgroundColor: '#ced0da' },
         '&::-webkit-scrollbar-thumb:hover': { backgroundColor: '#bfc2cf' }
       }} >
-        {cards?.map(card => <Card key={card._id} card={card} deleteCardDetails={deleteCardDetails} /> )}
+        {cards?.map(card => <Card key={card._id} card={card} deleteCardDetails={deleteCardDetails} updateCardTitle={updateCardTitle} /> )}
       </Box>
     </SortableContext>
   )
