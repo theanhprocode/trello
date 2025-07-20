@@ -215,6 +215,32 @@ function Board() {
     }
   }
 
+  const updateColumnTitle = async (columnId, newTitle) => {
+    // Backup original state for rollback
+    const originalBoard = { ...board }
+
+    try {
+      // update state board (optimistic update)
+      const newBoard = { ...board }
+      const columnToUpdate = newBoard.columns.find(column => column._id === columnId)
+
+      if (columnToUpdate) {
+        columnToUpdate.title = newTitle
+      }
+      setBoard(newBoard)
+
+      // gọi API cập nhật title
+      await updateColumnDetailsAPI(columnId, { title: newTitle })
+      toast.success('Column title updated successfully!')
+
+    } catch (error) {
+      // Rollback state on error
+      setBoard(originalBoard)
+      toast.error('Failed to update column title')
+      // console.error('Error updating column title:', error)
+    }
+  }
+
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
 
@@ -231,6 +257,7 @@ function Board() {
         deleteColumnDetails={deleteColumnDetails}
         deleteCardDetails={deleteCardDetails}
         updateCardTitle={updateCardTitle}
+        updateColumnTitle={updateColumnTitle}
       />
 
     </Container>

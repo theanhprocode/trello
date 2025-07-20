@@ -24,9 +24,10 @@ import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
 import { toast } from 'react-toastify'
 import { useConfirm } from 'material-ui-confirm'
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline'
 
 
-function Column({ column, createNewCard, deleteColumnDetails, deleteCardDetails, updateCardTitle }) {
+function Column({ column, createNewCard, deleteColumnDetails, deleteCardDetails, updateCardTitle, updateColumnTitle }) {
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
@@ -49,6 +50,10 @@ function Column({ column, createNewCard, deleteColumnDetails, deleteCardDetails,
   }
 
   const orderedCards = column.cards
+
+  const [openRenameColumn, setOpenRenameColumn] = useState(false)
+  const toggleRenameColumn = () => setOpenRenameColumn(!openRenameColumn)
+  const [newColumnTitle, setNewColumnTitle] = useState('')
 
   const [openNewCardForm, setOpenNewCardForm] = useState(false)
   const toggleNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
@@ -112,6 +117,42 @@ function Column({ column, createNewCard, deleteColumnDetails, deleteCardDetails,
     })
   }
 
+  // Xử lý rename column
+  const startRename = () => {
+    setNewColumnTitle(column?.title || '')
+    toggleRenameColumn()
+  }
+
+  const saveRename = () => {
+    if (!newColumnTitle) {
+      toast.error('Column cần có tên')
+      return
+    }
+    if (newColumnTitle.trim().length < 3) {
+      toast.error('Column title không thể có tên dưới 3 ký tự')
+      return
+    }
+    if (newColumnTitle.trim().length > 50) {
+      toast.error('Column không thể có tên trên 50 ký tự')
+      return
+    }
+
+    // Check if title actually changed
+    if (newColumnTitle.trim() === column?.title) {
+      // No change, just close form
+      toggleRenameColumn()
+      setNewColumnTitle('')
+      return
+    }
+
+    // TODO: Call API to update card title
+    updateColumnTitle(column._id, newColumnTitle.trim())
+
+    // Reset form
+    toggleRenameColumn()
+    setNewColumnTitle('')
+  }
+
 
   return (
     <div ref={setNodeRef} style={dndkitColumnStyles} {...attributes} >
@@ -127,17 +168,65 @@ function Column({ column, createNewCard, deleteColumnDetails, deleteCardDetails,
           maxHeight: (theme) => `calc(${theme.customStyles.boardContentHeight} - ${theme.spacing(5)})`
         }}>
         <Box sx={{
-          height: (theme) => theme.customStyles.columnHeaderHeight,
+          // height: (theme) => theme.customStyles.columnHeaderHeight,
           p: 2,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          minHeight: '50px'
         }}>
-          <Typography variant='h6' sx={{
-            fontSize: '1rem',
-            fontWeight: 'bold',
-            cursor: 'pointer'
-          }}>{column?.title}</Typography>
+          {!openRenameColumn ? (
+            <Typography variant='h6' sx={{
+              fontSize: '1rem',
+              fontWeight: 'bold',
+              cursor: 'pointer'
+            }}>{column?.title}</Typography>
+          ) : (
+            // Rename form - Giống như add column form
+            <Box data-no-dnd="true" sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 1,
+              mb: 1
+            }}>
+              <TextField
+                label="Enter new column name..."
+                type="text"
+                size='small'
+                variant='outlined'
+                autoFocus
+                value={newColumnTitle}
+                onChange={(e) => setNewColumnTitle(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && saveRename()}
+              />
+              <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                <Button
+                  onClick={saveRename}
+                  variant="contained" color="success" size='small'
+                  sx={{
+                    height: '30px',
+                    boxShadow: 'none',
+                    border: '1px solid',
+                    borderColor: (theme) => theme.palette.success.main,
+                    '&:hover': {
+                      bgcolor: (theme) => theme.palette.success.main,
+                      boxShadow: '0px 0px 8px rgb(105, 103, 103)'
+                    }
+                  }}
+                >
+                  Save
+                </Button>
+                <CloseIcon
+                  onClick={toggleRenameColumn}
+                  fontSize='small'
+                  sx={{
+                    cursor: 'pointer',
+                    '&:hover': { color: (theme) => theme.palette.warning.light }
+                  }}
+                />
+              </Box>
+            </Box>
+          )}
           <Box>
             <Tooltip title='More option'>
               <ExpandMoreIcon
@@ -186,6 +275,17 @@ function Column({ column, createNewCard, deleteColumnDetails, deleteCardDetails,
               <MenuItem>
                 <ListItemIcon><Cloud fontSize="small" /></ListItemIcon>
                 <ListItemText>Archive this column</ListItemText>
+              </MenuItem>
+              <MenuItem onClick={startRename} sx={{
+                '&:hover': {
+                  color: 'primary.main',
+                  '& .delete-icon': {
+                    color: 'primary.main'
+                  }
+                }
+              }}>
+                <ListItemIcon><DriveFileRenameOutlineIcon className="delete-icon" fontSize="small" /></ListItemIcon>
+                <ListItemText>Rename this column</ListItemText>
               </MenuItem>
               <MenuItem onClick={handleDeleteColumn} sx={{
                 '&:hover': {
