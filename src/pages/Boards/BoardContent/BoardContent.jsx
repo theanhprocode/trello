@@ -141,7 +141,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
     // console.log('setActiveDragItemData: ', event)
   }
 
-  //
+  //khi đang kéo
   const handleDragOver = (event) => {
     // Không làm gì nếu đang kéo column
     if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) return

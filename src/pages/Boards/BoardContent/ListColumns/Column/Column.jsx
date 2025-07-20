@@ -57,7 +57,6 @@ function Column({ column, createNewCard, deleteColumnDetails, deleteCardDetails,
 
   const [openNewCardForm, setOpenNewCardForm] = useState(false)
   const toggleNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
-
   const [newCardTitle, setNewCardTitle] = useState('')
 
   const addNewCard = () => {
