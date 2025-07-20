@@ -17,11 +17,11 @@ import ListItemText from '@mui/material/ListItemText'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useState } from 'react'
 import { useConfirm } from 'material-ui-confirm'
-import CachedIcon from '@mui/icons-material/Cached'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
 import CloseIcon from '@mui/icons-material/Close'
 import { toast } from 'react-toastify'
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline'
 
 function Card({ card, deleteCardDetails, updateCardTitle }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -91,7 +91,7 @@ function Card({ card, deleteCardDetails, updateCardTitle }) {
     updateCardTitle(card._id, newCardTitle.trim())
     // updateCardTitle(card._id, newCardTitle.trim())
 
-    // Reset form - Giống như addNewColumn
+    // Reset form
     toggleRenameForm()
     setNewCardTitle('')
   }
@@ -230,7 +230,7 @@ function Card({ card, deleteCardDetails, updateCardTitle }) {
             }
           }}>
             <ListItemIcon>
-              <CachedIcon className="rename-icon" fontSize="small" />
+              <DriveFileRenameOutlineIcon className="rename-icon" fontSize="small" />
             </ListItemIcon>
             <ListItemText>Đổi tên card</ListItemText>
           </MenuItem>
