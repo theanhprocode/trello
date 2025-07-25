@@ -29,7 +29,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
 function BoardContent({ board, createNewColumn, createNewCard, moveColumns, moveCardInTheSameColumn, moveCardToDifferentColumn, deleteColumnDetails, deleteCardDetails, updateCardTitle, updateColumnTitle }) {
   // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
   const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
-  const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, distance: 10 } })
+  const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 8 } })
 
 
   // const mySensors = useSensors(pointerSensor)
