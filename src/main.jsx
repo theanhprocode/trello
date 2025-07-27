@@ -8,14 +8,18 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { ConfirmProvider } from 'material-ui-confirm'
 
+// Redux imports
+import { Provider } from 'react-redux'
+import { store } from '~/redux/store.js'
+
 ReactDOM.createRoot(document.getElementById('root')).render(
-  // <React.StrictMode>
-  <CssVarProvider theme={theme}>
-    <ConfirmProvider defaultOption={{ dialogProps: { maxWidth: 'xs' } }}>
-      <CssBaseline/>
-      <App />
-      <ToastContainer position="bottom-left" theme="colored"/>
-    </ConfirmProvider>
-  </CssVarProvider>
-  // </React.StrictMode>
+  <Provider store={store}>
+    <CssVarProvider theme={theme}>
+      <ConfirmProvider defaultOption={{ dialogProps: { maxWidth: 'xs' } }}>
+        <CssBaseline/>
+        <App />
+        <ToastContainer position="bottom-left" theme="colored"/>
+      </ConfirmProvider>
+    </CssVarProvider>
+  </Provider>
 )
