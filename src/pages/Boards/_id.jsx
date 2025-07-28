@@ -4,7 +4,7 @@ import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '~/apis/mock-data'
-import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI, updateColumnDetailsAPI, moveCardToDifferentColumnAPI, deleteColumnDetailsAPI, deleteCardDetailsAPI, updateCardTitleAPI } from '~/apis'
+import { createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI, updateColumnDetailsAPI, moveCardToDifferentColumnAPI, deleteColumnDetailsAPI, deleteCardDetailsAPI, updateCardTitleAPI } from '~/apis'
 import { generatePlaceholderCard } from '~/utilities/formatters'
 import { isEmpty } from 'lodash'
 import { mapOrder } from '~/utilities/sorts'
@@ -12,32 +12,21 @@ import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
 import { toast } from 'react-toastify'
+import { fetchBoardDetailsAPI, updateCurrentActiveBoard, selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 
 function Board() {
-  const [board, setBoard] = useState(null)
+  const dispatch = useDispatch()
+  // const [board, setBoard] = useState(null)
+  const board = useSelector(selectCurrentActiveBoard)
 
   useEffect(() => {
     const boardId = '683b400d55ac32933be5ee9b'
+    // gọi api lấy dữ liệu board
 
-    fetchBoardDetailsAPI(boardId).then(board => {
-      // sắp lại column trước khi đưa dữ liệu xuống dưới
-      board.columns = mapOrder(board.columns, board.columnOrderIds, '_id')
-
-      // xử lý kéo thả vào 1 column rỗng
-      board.columns.forEach(column => {
-        if (isEmpty(column.cards)) {
-          column.cards = [generatePlaceholderCard(column)]
-          column.cardOrderIds = [generatePlaceholderCard(column)._id]
-        } else {
-          // sắp xếp lại cards trước khi đưa xuống dưới
-          column.cards = mapOrder(column.cards, column.cardOrderIds, '_id')
-        }
-      })
-
-      setBoard(board)
-    })
-  }, [])
+    dispatch(fetchBoardDetailsAPI(boardId))
+  }, [dispatch])
 
   // goi apicolumn va lam moi du lieu
   const createNewColumn = async (newColumnData) => {
@@ -55,7 +44,8 @@ function Board() {
     const newBoard = { ...board }
     newBoard.columns.push(createdColumn)
     newBoard.columnOrderIds.push(createdColumn._id)
-    setBoard(newBoard)
+    // setBoard(newBoard)
+    dispatch(updateCurrentActiveBoard(newBoard))
   }
 
   // goi apicard va lam moi du lieu
@@ -80,7 +70,8 @@ function Board() {
         columnToUpdate.cardOrderIds.push(createdCard._id)
       }
     }
-    setBoard(newBoard)
+    // setBoard(newBoard)
+    dispatch(updateCurrentActiveBoard(newBoard))
   }
 
   // gọi api và xử lý khi kéo thả column xong
@@ -90,7 +81,8 @@ function Board() {
     const newBoard = { ...board }
     newBoard.columns = dndOrderedColumns
     newBoard.columnOrderIds = dndOrderedColumnsIds
-    setBoard(newBoard)
+    // setBoard(newBoard)
+    dispatch(updateCurrentActiveBoard(newBoard))
 
     // gọi api cập nhật lại thứ tự column
     updateBoardDetailsAPI(newBoard._id, { columnOrderIds: dndOrderedColumnsIds })
@@ -103,7 +95,8 @@ function Board() {
       columnToUpdate.cards = dndOrderedCards
       columnToUpdate.cardOrderIds = dndOrderedCardIds
     }
-    setBoard(newBoard)
+    // setBoard(newBoard)
+    dispatch(updateCurrentActiveBoard(newBoard))
 
     // gọi api cập nhật column
     updateColumnDetailsAPI(columnId, { cardOrderIds: dndOrderedCardIds })
@@ -116,7 +109,8 @@ function Board() {
     const newBoard = { ...board }
     newBoard.columns = dndOrderedColumns
     newBoard.columnOrderIds = dndOrderedColumnsIds
-    setBoard(newBoard)
+    // setBoard(newBoard)
+    dispatch(updateCurrentActiveBoard(newBoard))
 
     // gọi api
     // xử lý trường hợp kéo card cuối cùng trong column
@@ -147,7 +141,8 @@ function Board() {
     const newBoard = { ...board }
     newBoard.columns = newBoard.columns.filter(column => column._id !== columnId)
     newBoard.columnOrderIds = newBoard.columnOrderIds.filter(_id => _id !== columnId)
-    setBoard(newBoard)
+    // setBoard(newBoard)
+    dispatch(updateCurrentActiveBoard(newBoard))
 
     // gọi API xoá column
     deleteColumnDetailsAPI(columnId).then(res => {
@@ -176,7 +171,8 @@ function Board() {
         columnToUpdate.cardOrderIds = [generatePlaceholderCard(columnToUpdate)._id]
       }
     }
-    setBoard(newBoard)
+    // setBoard(newBoard)
+    dispatch(updateCurrentActiveBoard(newBoard))
 
     // gọi API xoá card
     deleteCardDetailsAPI(cardId).then(res => {
@@ -184,62 +180,63 @@ function Board() {
     })
   }
 
-  const updateCardTitle = async (cardId, newTitle) => {
-    // Backup original state for rollback
-    const originalBoard = { ...board }
+  // const updateCardTitle = async (cardId, newTitle) => {
+  //   // Backup original state for rollback
+  //   const originalBoard = { ...board }
 
-    try {
-      // update state board (optimistic update)
-      const newBoard = { ...board }
-      const columnToUpdate = newBoard.columns.find(column =>
-        column.cards.some(card => card._id === cardId)
-      )
+  //   try {
+  //     // update state board (optimistic update)
+  //     const newBoard = { ...board }
+  //     const columnToUpdate = newBoard.columns.find(column =>
+  //       column.cards.some(card => card._id === cardId)
+  //     )
 
-      if (columnToUpdate) {
-        const cardToUpdate = columnToUpdate.cards.find(card => card._id === cardId)
-        if (cardToUpdate) {
-          cardToUpdate.title = newTitle
-        }
-      }
-      setBoard(newBoard)
+  //     if (columnToUpdate) {
+  //       const cardToUpdate = columnToUpdate.cards.find(card => card._id === cardId)
+  //       if (cardToUpdate) {
+  //         cardToUpdate.title = newTitle
+  //       }
+  //     }
+  //     // setBoard(newBoard)
+  //     dispatch(updateCurrentActiveBoard(newBoard))
 
-      // gọi API cập nhật title
-      await updateCardTitleAPI(cardId, { title: newTitle })
-      toast.success('Card title updated successfully!')
+  //     // gọi API cập nhật title
+  //     await updateCardTitleAPI(cardId, { title: newTitle })
+  //     toast.success('Card title updated successfully!')
 
-    } catch (error) {
-      // Rollback state on error
-      setBoard(originalBoard)
-      toast.error('Failed to update card title')
-      // console.error('Error updating card title:', error)
-    }
-  }
+  //   } catch (error) {
+  //     // Rollback state on error
+  //     setBoard(originalBoard)
+  //     toast.error('Failed to update card title')
+  //     // console.error('Error updating card title:', error)
+  //   }
+  // }
 
-  const updateColumnTitle = async (columnId, newTitle) => {
-    // Backup original state for rollback
-    const originalBoard = { ...board }
+  // const updateColumnTitle = async (columnId, newTitle) => {
+  //   // Backup original state for rollback
+  //   const originalBoard = { ...board }
 
-    try {
-      // update state board (optimistic update)
-      const newBoard = { ...board }
-      const columnToUpdate = newBoard.columns.find(column => column._id === columnId)
+  //   try {
+  //     // update state board (optimistic update)
+  //     const newBoard = { ...board }
+  //     const columnToUpdate = newBoard.columns.find(column => column._id === columnId)
 
-      if (columnToUpdate) {
-        columnToUpdate.title = newTitle
-      }
-      setBoard(newBoard)
+  //     if (columnToUpdate) {
+  //       columnToUpdate.title = newTitle
+  //     }
+  //     setBoard(newBoard)
 
-      // gọi API cập nhật title
-      await updateColumnDetailsAPI(columnId, { title: newTitle })
-      toast.success('Column title updated successfully!')
+  //     // gọi API cập nhật title
+  //     await updateColumnDetailsAPI(columnId, { title: newTitle })
+  //     toast.success('Column title updated successfully!')
 
-    } catch (error) {
-      // Rollback state on error
-      setBoard(originalBoard)
-      toast.error('Failed to update column title')
-      // console.error('Error updating column title:', error)
-    }
-  }
+  //   } catch (error) {
+  //     // Rollback state on error
+  //     setBoard(originalBoard)
+  //     toast.error('Failed to update column title')
+  //     // console.error('Error updating column title:', error)
+  //   }
+  // }
 
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
@@ -256,8 +253,8 @@ function Board() {
         moveCardToDifferentColumn={moveCardToDifferentColumn}
         deleteColumnDetails={deleteColumnDetails}
         deleteCardDetails={deleteCardDetails}
-        updateCardTitle={updateCardTitle}
-        updateColumnTitle={updateColumnTitle}
+        // updateCardTitle={updateCardTitle}
+        // updateColumnTitle={updateColumnTitle}
       />
 
     </Container>
