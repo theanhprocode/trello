@@ -6,8 +6,7 @@ import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '~/apis/mock-data'
 import { createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI, updateColumnDetailsAPI, moveCardToDifferentColumnAPI, deleteColumnDetailsAPI, deleteCardDetailsAPI, updateCardTitleAPI } from '~/apis'
 import { generatePlaceholderCard } from '~/utilities/formatters'
-import { isEmpty } from 'lodash'
-import { mapOrder } from '~/utilities/sorts'
+import { cloneDeep } from 'lodash'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
@@ -41,7 +40,7 @@ function Board() {
     createdColumn.cardOrderIds = [generatePlaceholderCard(createdColumn)._id]
 
     // cap nhat state board
-    const newBoard = { ...board }
+    const newBoard = cloneDeep(board)
     newBoard.columns.push(createdColumn)
     newBoard.columnOrderIds.push(createdColumn._id)
     // setBoard(newBoard)
@@ -57,7 +56,7 @@ function Board() {
     // console.log('Created Card:', createdCard)
 
     // cap nhat state board
-    const newBoard = { ...board }
+    const newBoard = cloneDeep(board)
     const columnToUpdate = newBoard.columns.find(column => column._id === createdCard.columnId)
     if (columnToUpdate) {
       // xoá card placeholder khi thêm card mới
@@ -89,7 +88,7 @@ function Board() {
   }
 
   const moveCardInTheSameColumn = (dndOrderedCards, dndOrderedCardIds, columnId) => {
-    const newBoard = { ...board }
+    const newBoard = cloneDeep(board)
     const columnToUpdate = newBoard.columns.find(column => column._id === columnId)
     if (columnToUpdate) {
       columnToUpdate.cards = dndOrderedCards
@@ -150,35 +149,35 @@ function Board() {
     })
   }
 
-  const deleteCardDetails = (cardId) => {
-    // update state board
-    const newBoard = { ...board }
+  // const deleteCardDetails = (cardId) => {
+  //   // update state board
+  //   const newBoard = { ...board }
 
-    // Tìm column chứa card cần xóa
-    const columnToUpdate = newBoard.columns.find(column =>
-      column.cards.some(card => card._id === cardId)
-    )
+  //   // Tìm column chứa card cần xóa
+  //   const columnToUpdate = newBoard.columns.find(column =>
+  //     column.cards.some(card => card._id === cardId)
+  //   )
 
-    if (columnToUpdate) {
-      // xóa card khỏi mảng cards
-      columnToUpdate.cards = columnToUpdate.cards.filter(card => card._id !== cardId)
-      // xóa cardId khỏi cardOrderIds
-      columnToUpdate.cardOrderIds = columnToUpdate.cardOrderIds.filter(_id => _id !== cardId)
+  //   if (columnToUpdate) {
+  //     // xóa card khỏi mảng cards
+  //     columnToUpdate.cards = columnToUpdate.cards.filter(card => card._id !== cardId)
+  //     // xóa cardId khỏi cardOrderIds
+  //     columnToUpdate.cardOrderIds = columnToUpdate.cardOrderIds.filter(_id => _id !== cardId)
 
-      // xử lý column rỗng - thêm placeholder card
-      if (isEmpty(columnToUpdate.cards)) {
-        columnToUpdate.cards = [generatePlaceholderCard(columnToUpdate)]
-        columnToUpdate.cardOrderIds = [generatePlaceholderCard(columnToUpdate)._id]
-      }
-    }
-    // setBoard(newBoard)
-    dispatch(updateCurrentActiveBoard(newBoard))
+  //     // xử lý column rỗng - thêm placeholder card
+  //     if (isEmpty(columnToUpdate.cards)) {
+  //       columnToUpdate.cards = [generatePlaceholderCard(columnToUpdate)]
+  //       columnToUpdate.cardOrderIds = [generatePlaceholderCard(columnToUpdate)._id]
+  //     }
+  //   }
+  //   // setBoard(newBoard)
+  //   dispatch(updateCurrentActiveBoard(newBoard))
 
-    // gọi API xoá card
-    deleteCardDetailsAPI(cardId).then(res => {
-      toast.success(res?.deleteResult)
-    })
-  }
+  //   // gọi API xoá card
+  //   deleteCardDetailsAPI(cardId).then(res => {
+  //     toast.success(res?.deleteResult)
+  //   })
+  // }
 
   // const updateCardTitle = async (cardId, newTitle) => {
   //   // Backup original state for rollback
@@ -252,7 +251,7 @@ function Board() {
         moveCardInTheSameColumn={moveCardInTheSameColumn}
         moveCardToDifferentColumn={moveCardToDifferentColumn}
         deleteColumnDetails={deleteColumnDetails}
-        deleteCardDetails={deleteCardDetails}
+        // deleteCardDetails={deleteCardDetails}
         // updateCardTitle={updateCardTitle}
         // updateColumnTitle={updateColumnTitle}
       />
