@@ -26,7 +26,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board, createNewColumn, createNewCard, moveColumns, moveCardInTheSameColumn, moveCardToDifferentColumn, deleteColumnDetails, deleteCardDetails, updateCardTitle, updateColumnTitle }) {
+function BoardContent({ board, moveColumns, moveCardInTheSameColumn, moveCardToDifferentColumn, deleteCardDetails, updateCardTitle, updateColumnTitle }) {
   // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
   const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
   const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 8 } })
@@ -332,7 +332,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
         overflowY: 'hidden',
         '&::-webkit-scrollbar-track': { m: 2 }
       }}>
-        <ListColumns columns={orderedColumns} createNewColumn={createNewColumn} createNewCard={createNewCard} deleteColumnDetails={deleteColumnDetails} deleteCardDetails={deleteCardDetails} updateCardTitle={updateCardTitle} updateColumnTitle={updateColumnTitle} />
+        <ListColumns columns={orderedColumns} deleteCardDetails={deleteCardDetails} updateCardTitle={updateCardTitle} updateColumnTitle={updateColumnTitle} />
         <DragOverlay dropAnimation={dropAnimation}>
           {(!activeDragItemType) && null}
           {(activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) && <Column column={activeDragItemData} />}

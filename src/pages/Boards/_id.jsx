@@ -4,8 +4,7 @@ import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 // import { mockData } from '~/apis/mock-data'
-import { createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI, updateColumnDetailsAPI, moveCardToDifferentColumnAPI, deleteColumnDetailsAPI, deleteCardDetailsAPI, updateCardTitleAPI } from '~/apis'
-import { generatePlaceholderCard } from '~/utilities/formatters'
+import { updateBoardDetailsAPI, updateColumnDetailsAPI, moveCardToDifferentColumnAPI, deleteColumnDetailsAPI, deleteCardDetailsAPI, updateCardTitleAPI } from '~/apis'
 import { cloneDeep } from 'lodash'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -17,8 +16,8 @@ import { useDispatch, useSelector } from 'react-redux'
 
 function Board() {
   const dispatch = useDispatch()
-  // const [board, setBoard] = useState(null)
   const board = useSelector(selectCurrentActiveBoard)
+  // const [board, setBoard] = useState(null)
 
   useEffect(() => {
     const boardId = '683b400d55ac32933be5ee9b'
@@ -27,51 +26,6 @@ function Board() {
     dispatch(fetchBoardDetailsAPI(boardId))
   }, [dispatch])
 
-  // goi apicolumn va lam moi du lieu
-  const createNewColumn = async (newColumnData) => {
-    const createdColumn = await createNewColumnAPI({
-      ...newColumnData,
-      boardId: board._id
-    })
-    // console.log('Created Column:', createdColumn)
-
-    // khi tạo mới column, sẽ tạo luôn 1 card placeholder
-    createdColumn.cards = [generatePlaceholderCard(createdColumn)]
-    createdColumn.cardOrderIds = [generatePlaceholderCard(createdColumn)._id]
-
-    // cap nhat state board
-    const newBoard = cloneDeep(board)
-    newBoard.columns.push(createdColumn)
-    newBoard.columnOrderIds.push(createdColumn._id)
-    // setBoard(newBoard)
-    dispatch(updateCurrentActiveBoard(newBoard))
-  }
-
-  // goi apicard va lam moi du lieu
-  const createNewCard = async (newCardData) => {
-    const createdCard = await createNewCardAPI({
-      ...newCardData,
-      boardId: board._id
-    })
-    // console.log('Created Card:', createdCard)
-
-    // cap nhat state board
-    const newBoard = cloneDeep(board)
-    const columnToUpdate = newBoard.columns.find(column => column._id === createdCard.columnId)
-    if (columnToUpdate) {
-      // xoá card placeholder khi thêm card mới
-      if (columnToUpdate.cards.some(card => card.FE_PlaceholderCard)) {
-        columnToUpdate.cards = [createdCard]
-        columnToUpdate.cardOrderIds = [createdCard._id]
-      } else {
-        // nếu không có card placeholder thì thêm card mới vào cuối
-        columnToUpdate.cards.push(createdCard)
-        columnToUpdate.cardOrderIds.push(createdCard._id)
-      }
-    }
-    // setBoard(newBoard)
-    dispatch(updateCurrentActiveBoard(newBoard))
-  }
 
   // gọi api và xử lý khi kéo thả column xong
   const moveColumns = (dndOrderedColumns) => {
@@ -133,20 +87,6 @@ function Board() {
         <Typography> loading... </Typography>
       </Box>
     )
-  }
-
-  const deleteColumnDetails = (columnId) => {
-    // update state board
-    const newBoard = { ...board }
-    newBoard.columns = newBoard.columns.filter(column => column._id !== columnId)
-    newBoard.columnOrderIds = newBoard.columnOrderIds.filter(_id => _id !== columnId)
-    // setBoard(newBoard)
-    dispatch(updateCurrentActiveBoard(newBoard))
-
-    // gọi API xoá column
-    deleteColumnDetailsAPI(columnId).then(res => {
-      toast.success(res?.deleteResult)
-    })
   }
 
   // const deleteCardDetails = (cardId) => {
@@ -245,12 +185,10 @@ function Board() {
       <BoardContent
         board={board}
 
-        createNewColumn={createNewColumn}
-        createNewCard={createNewCard}
-        moveColumns={moveColumns}
         moveCardInTheSameColumn={moveCardInTheSameColumn}
+        moveColumns={moveColumns}
         moveCardToDifferentColumn={moveCardToDifferentColumn}
-        deleteColumnDetails={deleteColumnDetails}
+
         // deleteCardDetails={deleteCardDetails}
         // updateCardTitle={updateCardTitle}
         // updateColumnTitle={updateColumnTitle}

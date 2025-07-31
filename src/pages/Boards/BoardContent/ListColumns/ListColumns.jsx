@@ -9,15 +9,24 @@ import TextField from '@mui/material/TextField'
 // import InputAdornment from '@mui/material/InputAdornment'
 // import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
+import { createNewColumnAPI } from '~/apis'
+import { cloneDeep } from 'lodash'
+import { generatePlaceholderCard } from '~/utilities/formatters'
+import { updateCurrentActiveBoard, selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 
-function ListColumns({ columns, createNewColumn, createNewCard, deleteColumnDetails, deleteCardDetails, updateCardTitle, updateColumnTitle }) {
+function ListColumns({ columns, deleteCardDetails, updateCardTitle, updateColumnTitle }) {
+  const board = useSelector(selectCurrentActiveBoard)
+  const dispatch = useDispatch()
+
+
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
   const toggleNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
 
   const [newColumnTitle, setNewColumnTitle] = useState('')
 
-  const addNewColumn = () => {
+  const addNewColumn = async () => {
     if (!newColumnTitle) {
       toast.error('Column cần có tên', { position: 'top-right' })
       return
@@ -36,7 +45,24 @@ function ListColumns({ columns, createNewColumn, createNewCard, deleteColumnDeta
       title: newColumnTitle.trim()
     }
 
-    createNewColumn(newColumnData)
+    // createNewColumn(newColumnData)
+    // goi apicolumn va lam moi du lieu
+    const createdColumn = await createNewColumnAPI({
+      ...newColumnData,
+      boardId: board._id
+    })
+    // console.log('Created Column:', createdColumn)
+
+    // khi tạo mới column, sẽ tạo luôn 1 card placeholder
+    createdColumn.cards = [generatePlaceholderCard(createdColumn)]
+    createdColumn.cardOrderIds = [generatePlaceholderCard(createdColumn)._id]
+
+    // cap nhat state board
+    const newBoard = cloneDeep(board)
+    newBoard.columns.push(createdColumn)
+    newBoard.columnOrderIds.push(createdColumn._id)
+    // setBoard(newBoard)
+    dispatch(updateCurrentActiveBoard(newBoard))
 
     // Reset form
     toggleNewColumnForm()
@@ -56,7 +82,7 @@ function ListColumns({ columns, createNewColumn, createNewCard, deleteColumnDeta
           display: 'flex'
         }}>
 
-          {columns?.map(column => <Column key={column._id} column={column} createNewCard={createNewCard} deleteColumnDetails={deleteColumnDetails} deleteCardDetails={deleteCardDetails} updateCardTitle={updateCardTitle} updateColumnTitle={updateColumnTitle} /> )}
+          {columns?.map(column => <Column key={column._id} column={column} deleteCardDetails={deleteCardDetails} updateCardTitle={updateCardTitle} updateColumnTitle={updateColumnTitle} /> )}
 
           {!openNewColumnForm
             ? <Box onClick={toggleNewColumnForm} sx={{
