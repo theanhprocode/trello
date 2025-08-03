@@ -1,11 +1,22 @@
-import Board from '~/pages/Boards/_id'
+import { Routes, Route, Navigate } from 'react-router-dom'
 
+import Board from '~/pages/Boards/_id'
+import NotFound from '~/pages/404/NotFound.jsx'
 
 function App() {
   return (
-    <>
-      <Board/>
-    </>
+    <Routes>
+
+      <Route path='/' element={
+        // replace giá trị true để nó thay thế route /, có thể hiểu là route này sẽ không có trong history Browser
+        <Navigate to='/boards/683b400d55ac32933be5ee9b' replace={true} />
+      } />
+
+      <Route path='/boards/:boardId' element={<Board />} />
+
+      {/* 404 not found page */}
+      <Route path='*' element={<NotFound />} />
+    </Routes>
   )
 }
 
