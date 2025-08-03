@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography'
 import { toast } from 'react-toastify'
 import { fetchBoardDetailsAPI, updateCurrentActiveBoard, selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
 
 function Board() {
@@ -19,12 +20,13 @@ function Board() {
   const board = useSelector(selectCurrentActiveBoard)
   // const [board, setBoard] = useState(null)
 
+  const { boardId } = useParams() // Lấy boardId từ URL nếu cần thiết
+
   useEffect(() => {
-    const boardId = '683b400d55ac32933be5ee9b'
     // gọi api lấy dữ liệu board
 
     dispatch(fetchBoardDetailsAPI(boardId))
-  }, [dispatch])
+  }, [dispatch, boardId])
 
 
   // gọi api và xử lý khi kéo thả column xong
