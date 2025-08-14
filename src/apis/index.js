@@ -1,5 +1,6 @@
-import axios from 'axios'
+import authorizedAxiosInstance from '~/utilities/authorizeAxios'
 import { API_ROOT } from '~/utilities/constans'
+import axios from 'axios'
 
 // board
 // export const fetchBoardDetailsAPI = async (boardId) => {
@@ -8,44 +9,44 @@ import { API_ROOT } from '~/utilities/constans'
 // }
 
 export const updateBoardDetailsAPI = async (boardId, updateData) => {
-  const response = await axios.put(`${API_ROOT}/v1/boards/${boardId}`, updateData)
+  const response = await authorizedAxiosInstance.put(`${API_ROOT}/v1/boards/${boardId}`, updateData)
   return response.data
 }
 
 export const moveCardToDifferentColumnAPI = async (updateData) => {
-  const response = await axios.put(`${API_ROOT}/v1/boards/supports/moving_card`, updateData)
+  const response = await authorizedAxiosInstance.put(`${API_ROOT}/v1/boards/supports/moving_card`, updateData)
   return response.data
 }
 
 // column
 export const createNewColumnAPI = async (newColumnData) => {
-  const response = await axios.post(`${API_ROOT}/v1/columns`, newColumnData)
+  const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/columns`, newColumnData)
   return response.data
 }
 
 export const updateColumnDetailsAPI = async (columnId, updateData) => {
-  const response = await axios.put(`${API_ROOT}/v1/columns/${columnId}`, updateData)
+  const response = await authorizedAxiosInstance.put(`${API_ROOT}/v1/columns/${columnId}`, updateData)
   return response.data
 }
 
 export const deleteColumnDetailsAPI = async (columnId) => {
-  const response = await axios.delete(`${API_ROOT}/v1/columns/${columnId}`)
+  const response = await authorizedAxiosInstance.delete(`${API_ROOT}/v1/columns/${columnId}`)
   return response.data
 }
 
 // card
 export const createNewCardAPI = async (newCardData) => {
-  const response = await axios.post(`${API_ROOT}/v1/cards`, newCardData)
+  const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/cards`, newCardData)
   return response.data
 }
 
 export const updateCardTitleAPI = async (cardId, updateData) => {
-  const response = await axios.put(`${API_ROOT}/v1/cards/${cardId}`, updateData)
+  const response = await authorizedAxiosInstance.put(`${API_ROOT}/v1/cards/${cardId}`, updateData)
   return response.data
 }
 
 export const deleteCardDetailsAPI = async (cardId) => {
-  const response = await axios.delete(`${API_ROOT}/v1/cards/${cardId}`)
+  const response = await authorizedAxiosInstance.delete(`${API_ROOT}/v1/cards/${cardId}`)
   return response.data
 }
 
