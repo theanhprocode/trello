@@ -66,20 +66,20 @@ function Column({ column, deleteCardDetails, updateCardTitle, updateColumnTitle 
   const [newCardTitle, setNewCardTitle] = useState('')
 
   const addNewCard = async () => {
-    if (!newCardTitle) {
-      toast.error('Card cần có tên', { position: 'top-right' })
-      return
-    }
+    // if (!newCardTitle) {
+    //   toast.error('Card cần có tên', { position: 'top-right' })
+    //   return
+    // }
 
-    if (newCardTitle.trim().length < 3) {
-      toast.error('Card không thể có tên dưới 3 ký tự', { position: 'top-right' })
-      return
-    }
+    // if (newCardTitle.trim().length < 3) {
+    //   toast.error('Card không thể có tên dưới 3 ký tự', { position: 'top-right' })
+    //   return
+    // }
 
-    if (newCardTitle.trim().length > 256) {
-      toast.error('Card không thể có tên trên 256 ký tự', { position: 'top-right' })
-      return
-    }
+    // if (newCardTitle.trim().length > 256) {
+    //   toast.error('Card không thể có tên trên 256 ký tự', { position: 'top-right' })
+    //   return
+    // }
 
     // Call API to add new Card
     const newCardData = {

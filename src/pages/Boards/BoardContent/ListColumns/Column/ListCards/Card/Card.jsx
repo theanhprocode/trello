@@ -66,26 +66,26 @@ function Card({ card, deleteCardDetails, updateCardTitle }) {
 
   // Save rename - Giống như addNewColumn
   const saveRename = () => {
-    if (!newCardTitle) {
-      toast.error('Card cần có tên')
-      return
-    }
-    if (newCardTitle.trim().length < 3) {
-      toast.error('Card title không thể có tên dưới 3 ký tự')
-      return
-    }
-    if (newCardTitle.trim().length > 50) {
-      toast.error('Card không thể có tên trên 50 ký tự')
-      return
-    }
+    // if (!newCardTitle) {
+    //   toast.error('Card cần có tên')
+    //   return
+    // }
+    // if (newCardTitle.trim().length < 3) {
+    //   toast.error('Card title không thể có tên dưới 3 ký tự')
+    //   return
+    // }
+    // if (newCardTitle.trim().length > 50) {
+    //   toast.error('Card không thể có tên trên 50 ký tự')
+    //   return
+    // }
 
-    // Check if title actually changed
-    if (newCardTitle.trim() === card?.title) {
-      // No change, just close form
-      toggleRenameForm()
-      setNewCardTitle('')
-      return
-    }
+    // // Check if title actually changed
+    // if (newCardTitle.trim() === card?.title) {
+    //   // No change, just close form
+    //   toggleRenameForm()
+    //   setNewCardTitle('')
+    //   return
+    // }
 
     // TODO: Call API to update card title
     updateCardTitle(card._id, newCardTitle.trim())
