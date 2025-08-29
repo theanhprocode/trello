@@ -390,6 +390,7 @@ function Column({ column, deleteCardDetails, updateCardTitle, updateColumnTitle 
               />
               <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                 <Button
+                  className="interceptor-loading"
                   onClick={addNewCard}
                   variant="contained" color="success" size='small'
                   data-no-dnd="true"
