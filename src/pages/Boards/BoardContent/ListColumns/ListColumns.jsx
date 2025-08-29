@@ -128,6 +128,7 @@ function ListColumns({ columns, deleteCardDetails, updateCardTitle, updateColumn
               />
               <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                 <Button
+                  className="interceptor-loading"
                   onClick={addNewColumn}
                   variant="contained" color="success" size='small'
                   sx={{ height: '30px', boxShadow: 'none', border: '1px solid', borderColor: (theme) => theme.palette.success.main, '&:hover': { bgcolor: (theme) => theme.palette.success.main, boxShadow: '0px 0px 8px rgb(105, 103, 103)' } }}
