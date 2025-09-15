@@ -1,7 +1,7 @@
 // export const API_ROOT = 'http://localhost:8017'
 let apiRoot = ''
 
-console.log('process.env', process.env)
+// console.log('process.env', process.env)
 
 if (process.env.BUILD_MODE === 'dev') {
   apiRoot = 'http://localhost:8017'
