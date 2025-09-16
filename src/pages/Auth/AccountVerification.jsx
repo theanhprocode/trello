@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSearchParams, Navigate } from 'react-router-dom'
 import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
-
+import { verifyUserApi } from '~/apis/index.js'
 
 
 // Lấy giá trị email và token từ url
@@ -17,6 +17,14 @@ function AccountVerification() {
   const [verified, setVerified] = useState(false)
 
   // gọi api để verify account
+  useEffect(() => {
+    if (email || token) {
+      verifyUserApi({ email, token })
+        .then(() => {
+          setVerified(true)
+        })
+    }
+  }, [email, token])
 
   // Nếu Url có vấn đề (thiếu email hoặc token) thì ra trang 404
   if (!email || !token) {
@@ -24,7 +32,7 @@ function AccountVerification() {
   }
 
   // Nếu chưa verify xong thì hiện loading
-  if (verified) {
+  if (!verified) {
     return <PageLoadingSpinner caption="Verifying your account..." />
   }
 
