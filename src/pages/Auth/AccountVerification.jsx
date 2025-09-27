@@ -8,10 +8,10 @@ import { verifyUserApi } from '~/apis/index.js'
 
 function AccountVerification() {
   let [searchParams] = useSearchParams()
-  console.log(searchParams)
+  // console.log(searchParams)
 
   const { email, token } = Object.fromEntries([...searchParams])
-  console.log(email, token)
+  // console.log(email, token)
 
   // tạo một state để hiển thị trạng thái xác thực
   const [verified, setVerified] = useState(false)

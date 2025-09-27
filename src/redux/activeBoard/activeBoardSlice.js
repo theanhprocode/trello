@@ -4,7 +4,6 @@ import { API_ROOT } from '~/utilities/constans'
 import { mapOrder } from '~/utilities/sorts'
 import { isEmpty } from 'lodash'
 import { generatePlaceholderCard } from '~/utilities/formatters'
-import axios from 'axios'
 
 
 // Khởi tạo state của 1 slice
