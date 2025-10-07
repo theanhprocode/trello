@@ -15,16 +15,24 @@ import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { store } from '~/redux/store.js'
 
+// redux-persist
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore } from 'redux-persist'
+const persistor = persistStore(store)
+
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter basename="/">
     <Provider store={store}>
-      <CssVarProvider theme={theme}>
-        <ConfirmProvider defaultOption={{ dialogProps: { maxWidth: 'xs' } }}>
-          <CssBaseline/>
-          <App />
-          <ToastContainer position="bottom-left" theme="colored"/>
-        </ConfirmProvider>
-      </CssVarProvider>
+      <PersistGate persistor={persistor}>
+        <CssVarProvider theme={theme}>
+          <ConfirmProvider defaultOption={{ dialogProps: { maxWidth: 'xs' } }}>
+            <CssBaseline/>
+            <App />
+            <ToastContainer position="bottom-left" theme="colored"/>
+          </ConfirmProvider>
+        </CssVarProvider>
+      </PersistGate>
     </Provider>
   </BrowserRouter>
 )
