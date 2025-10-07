@@ -41,7 +41,7 @@ authorizedAxiosInstance.interceptors.response.use((response) => {
       errorMessage = error.response.data.message
     }
     // Hiển thị mọi mã lỗi trừ 410
-    if (error?.response?.statusCode !== 410) {
+    if (error.response?.status !== 410) {
       toast.error(errorMessage)
     }
     return Promise.reject(error)
