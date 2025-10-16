@@ -22,7 +22,7 @@ const persistor = persistStore(store)
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <BrowserRouter basename="/">
+  <BrowserRouter basename="/" future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <CssVarProvider theme={theme}>
