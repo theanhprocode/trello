@@ -20,6 +20,10 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
 const persistor = persistStore(store)
 
+// inject redux store to authorizeAxios for dispatching logout action
+import { injectStore } from '~/utilities/authorizeAxios'
+injectStore(store)
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter basename="/" future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
