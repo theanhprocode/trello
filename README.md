@@ -28,10 +28,10 @@ Production: https://trello-rose-zeta.vercel.app/
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **React 18.2** - Modern React with Hooks and Concurrent Features
-- **Redux Toolkit** - Efficient state management with RTK Query
-- **Material-UI v5** - Google's Material Design components
-- **React Router v6** - Client-side routing with protected routes
+- **React** - Modern React with Hooks and Concurrent Features
+- **Redux** - Efficient state management with RTK Query
+- **Material-UI** - Google's Material Design components
+- **React Router** - Client-side routing with protected routes
 - **@dnd-kit** - Modern drag-and-drop library
 - **React Hook Form** - Performant form handling with validation
 - **Axios** - HTTP client with interceptors and error handling
