@@ -42,9 +42,7 @@ function LoginForm() {
     ).then(res => {
       console.log(res)
       // kiểm tra không có lỗi (có nghĩa là login thành công) thì mới redirect về route
-      if (!res.error) {
-        navigate('/')
-      }
+      if (!res.error) { navigate('/') }
     })
   }
 

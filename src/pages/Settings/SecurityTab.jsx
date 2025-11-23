@@ -12,9 +12,12 @@ import { FIELD_REQUIRED_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
 import { useForm } from 'react-hook-form'
 import { useConfirm } from 'material-ui-confirm'
+import { useDispatch } from 'react-redux'
+import { updateUserAPI, logoutUserAPI } from '~/redux/user/userSlice'
 import { toast } from 'react-toastify'
 
 function SecurityTab() {
+  const dispatch = useDispatch()
   const { register, handleSubmit, watch, formState: { errors } } = useForm()
 
   // Ôn lại: https://www.npmjs.com/package/material-ui-confirm
@@ -29,12 +32,19 @@ function SecurityTab() {
       confirmationText: 'Confirm',
       cancellationText: 'Cancel'
     }).then(() => {
-      const { current_password, new_password, new_password_confirmation } = data
-      console.log('current_password: ', current_password)
-      console.log('new_password: ', new_password)
-      console.log('new_password_confirmation: ', new_password_confirmation)
+      const { current_password, new_password } = data
 
       // Gọi API...
+      toast.promise(
+        dispatch(updateUserAPI({ current_password, new_password })),
+        { pending: 'updating profile...' }
+      ).then(res => {
+        // kiểm tra không có lỗi (update thành công) thì mới thực hiện hành động tiếp theo
+        if (!res.error) {
+          toast.success('Change password successfully!, please login again.')
+          dispatch(logoutUserAPI(false)) // logout mà không hiện toast success nữa
+        }
+      })
     }).catch(() => {})
   }
 
