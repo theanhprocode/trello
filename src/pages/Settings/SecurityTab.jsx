@@ -42,7 +42,7 @@ function SecurityTab() {
         // kiểm tra không có lỗi (update thành công) thì mới thực hiện hành động tiếp theo
         if (!res.error) {
           toast.success('Change password successfully!, please login again.')
-          dispatch(logoutUserAPI(false)) // logout mà không hiện toast success nữa
+          dispatch(logoutUserAPI(false)) // logout mà không hiện toast success
         }
       })
     }).catch(() => {})

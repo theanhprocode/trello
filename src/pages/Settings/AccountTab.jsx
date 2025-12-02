@@ -82,6 +82,17 @@ function AccountTab() {
     }
 
     // Gọi API...
+    toast.promise(
+      dispatch(updateUserAPI(reqData)),
+      { pending: 'updating profile...' }
+    ).then(res => {
+      // kiểm tra không có lỗi (update thành công) thì mới thực hiện hành động tiếp theo
+      if (!res.error) {
+        toast.success('Update profile successfully!')
+      }
+    })
+    // reset lại input file
+    e.target.value = ''
   }
 
   return (
