@@ -1,4 +1,3 @@
-// TrungQuanDev: https://youtube.com/@trungquandev
 import { Link, useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -19,7 +18,7 @@ import {
   EMAIL_RULE_MESSAGE
 } from '~/utilities/validators'
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
-import { registerUserApi } from '~/apis'
+import { registerUserAPI } from '~/apis'
 import { toast } from 'react-toastify'
 
 
@@ -30,7 +29,7 @@ function RegisterForm() {
   const submitRegister = (data) => {
     const { email, password } = data
     toast.promise(
-      registerUserApi({ email, password }),
+      registerUserAPI({ email, password }),
       { pending: 'Processing...', success: 'Register successfully!', error: 'Register failed!' }
     ).then(user => {
       navigate(`/login?registeredEmail=${user.email}`)

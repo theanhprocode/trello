@@ -2,7 +2,7 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { interceptorLoadingElements } from '~/utilities/formatters'
-import { refreshTokenApi } from '~/apis'
+import { refreshTokenAPI } from '~/apis'
 import { logoutUserAPI } from '~/redux/user/userSlice'
 
 
@@ -62,7 +62,7 @@ authorizedAxiosInstance.interceptors.response.use((response) => {
       // các requests tiếp theo nếu có lỗi 410 sẽ dùng lại promise này
       // nếu chưa có promise refreshToken nào đang chạy thì tạo mới
       if (!refreshTokenPromise) {
-        refreshTokenPromise = refreshTokenApi()
+        refreshTokenPromise = refreshTokenAPI()
           .then((data) => {
             // Refresh token thành công
             return data?.accessToken

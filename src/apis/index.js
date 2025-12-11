@@ -53,20 +53,31 @@ export const deleteCardDetailsAPI = async (cardId) => {
 }
 
 // user
-export const registerUserApi = async (data) => {
+export const registerUserAPI = async (data) => {
   const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/users/register`, data)
   toast.success('Register successfully! Please check your email to verify your account.', { theme: 'colored' })
   return response.data
 }
 
 
-export const verifyUserApi = async (data) => {
+export const verifyUserAPI = async (data) => {
   const response = await authorizedAxiosInstance.get(`${API_ROOT}/v1/users/verify`, { params: data })
   toast.success('Account verified successfully! You can now log in.', { theme: 'colored' })
   return response.data
 }
 
-export const refreshTokenApi = async () => {
+export const refreshTokenAPI = async () => {
   const response = await authorizedAxiosInstance.get(`${API_ROOT}/v1/users/refresh-token`)
+  return response.data
+}
+
+export const fetchBoardsAPI = async (searchPath) => {
+  const response = await authorizedAxiosInstance.get(`${API_ROOT}/v1/boards${searchPath}`)
+  return response.data
+}
+
+export const createNewBoardAPI = async (data) => {
+  const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/boards`, data)
+  toast.success('Create new board successfully!')
   return response.data
 }
