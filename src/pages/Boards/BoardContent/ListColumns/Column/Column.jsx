@@ -1,5 +1,4 @@
 import React from 'react'
-import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -24,14 +23,14 @@ import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
 import { toast } from 'react-toastify'
 import { useConfirm } from 'material-ui-confirm'
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline'
 import { cloneDeep } from 'lodash'
-import { createNewCardAPI, deleteColumnDetailsAPI } from '~/apis'
+import { createNewCardAPI, deleteColumnDetailsAPI, updateColumnDetailsAPI } from '~/apis'
 import { updateCurrentActiveBoard, selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
 
 
-function Column({ column, deleteCardDetails, updateCardTitle, updateColumnTitle }) {
+function Column({ column, deleteCardDetails, updateCardTitle }) {
   const dispatch = useDispatch()
   const board = useSelector(selectCurrentActiveBoard)
 
@@ -57,9 +56,9 @@ function Column({ column, deleteCardDetails, updateCardTitle, updateColumnTitle 
 
   const orderedCards = column.cards
 
-  const [openRenameColumn, setOpenRenameColumn] = useState(false)
-  const toggleRenameColumn = () => setOpenRenameColumn(!openRenameColumn)
-  const [newColumnTitle, setNewColumnTitle] = useState('')
+  // const [openRenameColumn, setOpenRenameColumn] = useState(false)
+  // const toggleRenameColumn = () => setOpenRenameColumn(!openRenameColumn)
+  // const [newColumnTitle, setNewColumnTitle] = useState('')
 
   const [openNewCardForm, setOpenNewCardForm] = useState(false)
   const toggleNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
@@ -154,42 +153,19 @@ function Column({ column, deleteCardDetails, updateCardTitle, updateColumnTitle 
     })
   }
 
-  // Xử lý rename column
-  const startRename = () => {
-    setNewColumnTitle(column?.title || '')
-    toggleRenameColumn()
+  const onUpDateColumnTitle = (newTitle) => {
+    // console.log('New column title: ', newTitle)
+    // 1. Gọi API update
+    updateColumnDetailsAPI(column._id, { title: newTitle }).then(() => {
+      // 2. Update Redux store
+      const newBoard = cloneDeep(board)
+      const columnToUpdate = newBoard.columns.find(c => c._id === column._id)
+      if (columnToUpdate) {
+        columnToUpdate.title = newTitle
+      }
+      dispatch(updateCurrentActiveBoard(newBoard))
+    })
   }
-
-  const saveRename = () => {
-    if (!newColumnTitle) {
-      toast.error('Column cần có tên')
-      return
-    }
-    if (newColumnTitle.trim().length < 3) {
-      toast.error('Column title không thể có tên dưới 3 ký tự')
-      return
-    }
-    if (newColumnTitle.trim().length > 50) {
-      toast.error('Column không thể có tên trên 50 ký tự')
-      return
-    }
-
-    // Check if title actually changed
-    if (newColumnTitle.trim() === column?.title) {
-      // No change, just close form
-      toggleRenameColumn()
-      setNewColumnTitle('')
-      return
-    }
-
-    // TODO: Call API to update card title
-    updateColumnTitle(column._id, newColumnTitle.trim())
-
-    // Reset form
-    toggleRenameColumn()
-    setNewColumnTitle('')
-  }
-
 
   return (
     <div ref={setNodeRef} style={dndkitColumnStyles} {...attributes} >
@@ -212,58 +188,11 @@ function Column({ column, deleteCardDetails, updateCardTitle, updateColumnTitle 
           justifyContent: 'space-between',
           minHeight: '50px'
         }}>
-          {!openRenameColumn ? (
-            <Typography variant='h6' sx={{
-              fontSize: '1rem',
-              fontWeight: 'bold',
-              cursor: 'pointer'
-            }}>{column?.title}</Typography>
-          ) : (
-            // Rename form - Giống như add column form
-            <Box data-no-dnd="true" sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 1,
-              mb: 1
-            }}>
-              <TextField
-                label="Enter new column name..."
-                type="text"
-                size='small'
-                variant='outlined'
-                autoFocus
-                value={newColumnTitle}
-                onChange={(e) => setNewColumnTitle(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && saveRename()}
-              />
-              <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                <Button
-                  onClick={saveRename}
-                  variant="contained" color="success" size='small'
-                  sx={{
-                    height: '30px',
-                    boxShadow: 'none',
-                    border: '1px solid',
-                    borderColor: (theme) => theme.palette.success.main,
-                    '&:hover': {
-                      bgcolor: (theme) => theme.palette.success.main,
-                      boxShadow: '0px 0px 8px rgb(105, 103, 103)'
-                    }
-                  }}
-                >
-                  Save
-                </Button>
-                <CloseIcon
-                  onClick={toggleRenameColumn}
-                  fontSize='small'
-                  sx={{
-                    cursor: 'pointer',
-                    '&:hover': { color: (theme) => theme.palette.warning.light }
-                  }}
-                />
-              </Box>
-            </Box>
-          )}
+          <ToggleFocusInput
+            value={column?.title}
+            onChangedValue={onUpDateColumnTitle}
+            data-no-dnd="true"
+          />
           <Box>
             <Tooltip title='More option'>
               <ExpandMoreIcon
@@ -313,7 +242,7 @@ function Column({ column, deleteCardDetails, updateCardTitle, updateColumnTitle 
                 <ListItemIcon><Cloud fontSize="small" /></ListItemIcon>
                 <ListItemText>Archive this column</ListItemText>
               </MenuItem>
-              <MenuItem onClick={startRename} sx={{
+              <MenuItem sx={{
                 '&:hover': {
                   color: 'primary.main',
                   '& .delete-icon': {
@@ -321,8 +250,6 @@ function Column({ column, deleteCardDetails, updateCardTitle, updateColumnTitle 
                   }
                 }
               }}>
-                <ListItemIcon><DriveFileRenameOutlineIcon className="delete-icon" fontSize="small" /></ListItemIcon>
-                <ListItemText>Rename this column</ListItemText>
               </MenuItem>
               <MenuItem onClick={handleDeleteColumn} sx={{
                 '&:hover': {

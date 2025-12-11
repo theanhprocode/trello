@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams, Navigate } from 'react-router-dom'
 import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
-import { verifyUserApi } from '~/apis/index.js'
+import { verifyUserAPI } from '~/apis/index.js'
 
 
 // Lấy giá trị email và token từ url
@@ -19,7 +19,7 @@ function AccountVerification() {
   // gọi api để verify account
   useEffect(() => {
     if (email || token) {
-      verifyUserApi({ email, token })
+      verifyUserAPI({ email, token })
         .then(() => {
           setVerified(true)
         })
