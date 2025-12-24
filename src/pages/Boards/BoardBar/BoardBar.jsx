@@ -11,6 +11,7 @@ import { Tooltip } from '@mui/material'
 import Button from '@mui/material/Button'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import { capitalizeFirstLetter } from '~/utilities/formatters'
+import BoardUserGroup from '~/pages/Boards/BoardBar/BoardUserGroup'
 
 
 const MENU_STYLE = {
@@ -89,27 +90,8 @@ function BoardBar({ board }) {
           }}
         >Invite</Button>
 
-        <AvatarGroup max={3} sx={{ gap: '10px', '& .MuiAvatar-root': { width: '34px', height: '34px', fontSize: '16px', border: 'none', color: 'white', cursor: 'pointer', '&:first-of-type': { bgcolor: '#a4b0be' } } }}>
-          <Tooltip title="theanh">
-            <Avatar alt="Theanh" src="https://lh3.googleusercontent.com/ogw/AF2bZyjDCEHr4iqlRuN6gY4Jr_E19PWBAHCQjbdDwt8MYajhzNE=s32-c-mo" />
-          </Tooltip>
-
-          <Tooltip title="theanh">
-            <Avatar alt="Theanh" src="https://lh3.googleusercontent.com/ogw/AF2bZyjDCEHr4iqlRuN6gY4Jr_E19PWBAHCQjbdDwt8MYajhzNE=s32-c-mo" />
-          </Tooltip>
-
-          <Tooltip title="theanh">
-            <Avatar alt="Theanh" src="https://lh3.googleusercontent.com/ogw/AF2bZyjDCEHr4iqlRuN6gY4Jr_E19PWBAHCQjbdDwt8MYajhzNE=s32-c-mo" />
-          </Tooltip>
-
-          <Tooltip title="theanh">
-            <Avatar alt="Theanh" src="https://lh3.googleusercontent.com/ogw/AF2bZyjDCEHr4iqlRuN6gY4Jr_E19PWBAHCQjbdDwt8MYajhzNE=s32-c-mo" />
-          </Tooltip>
-
-          <Tooltip title="theanh">
-            <Avatar alt="Theanh" src="https://lh3.googleusercontent.com/ogw/AF2bZyjDCEHr4iqlRuN6gY4Jr_E19PWBAHCQjbdDwt8MYajhzNE=s32-c-mo" />
-          </Tooltip>
-        </AvatarGroup>
+        {/* danh sách người dùng trên board */}
+        <BoardUserGroup />
       </Box>
     </Box>
   )
