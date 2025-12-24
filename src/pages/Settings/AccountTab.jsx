@@ -1,4 +1,3 @@
-import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
@@ -17,20 +16,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { selectCurrentUser, updateUserAPI } from '~/redux/user/userSlice'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
+import VisuallyHiddenInput from '~/components/Form/VisuallyHiddenInput'
 
-// Xử lý custom đẹp cái input file ở đây: https://mui.com/material-ui/react-button/#file-upload
-// Ngoài ra note thêm lib này từ docs của MUI nó recommend nếu cần dùng: https://github.com/viclafouch/mui-file-input
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 1
-})
 
 function AccountTab() {
   const dispatch = useDispatch()
@@ -65,7 +52,7 @@ function AccountTab() {
 
   const uploadAvatar = (e) => {
     // Lấy file thông qua e.target?.files[0] và validate nó trước khi xử lý
-    console.log('e.target?.files[0]: ', e.target?.files[0])
+    // console.log('e.target?.files[0]: ', e.target?.files[0])
     const error = singleFileValidator(e.target?.files[0])
     if (error) {
       toast.error(error)
@@ -75,11 +62,10 @@ function AccountTab() {
     // Sử dụng FormData để xử lý dữ liệu liên quan tới file khi gọi API
     let reqData = new FormData()
     reqData.append('avatar', e.target?.files[0])
-    // Cách để log được dữ liệu thông qua FormData
-    console.log('reqData: ', reqData)
-    for (const value of reqData.values()) {
-      console.log('reqData Value: ', value)
-    }
+    // console.log('reqData: ', reqData)
+    // for (const value of reqData.values()) {
+    //   console.log('reqData Value: ', value)
+    // }
 
     // Gọi API...
     toast.promise(
@@ -115,7 +101,7 @@ function AccountTab() {
           <Box>
             <Avatar
               sx={{ width: 84, height: 84, mb: 1 }}
-              alt="TrungQuanDev"
+              alt="TheAnh"
               src={currentUser?.avatar}
             />
             <Tooltip title="Upload a new image to update your avatar immediately.">

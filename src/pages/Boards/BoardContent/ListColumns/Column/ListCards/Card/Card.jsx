@@ -20,10 +20,13 @@ import { useConfirm } from 'material-ui-confirm'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
 import CloseIcon from '@mui/icons-material/Close'
-import { toast } from 'react-toastify'
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline'
+import { useDispatch } from 'react-redux'
+import { updateCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 function Card({ card, deleteCardDetails, updateCardTitle }) {
+  const dispatch = useDispatch()
+
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: card._id,
     data: { ...card }
@@ -121,8 +124,13 @@ function Card({ card, deleteCardDetails, updateCardTitle }) {
     })
   }
 
+  const setActiveCard = () => {
+    dispatch(updateCurrentActiveCard(card))
+  }
+
   return (
     <MuiCard
+      onClick={setActiveCard}
       ref={setNodeRef} style={dndkitCardStyles} {...attributes} {...listeners}
       sx={{
         cursor: 'pointer',
