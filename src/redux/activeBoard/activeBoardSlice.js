@@ -36,6 +36,22 @@ export const activeBoardSlice = createSlice({
 
       // update lại dữ liệu của cái CurrentActiveBoard
       state.currentActiveBoard = board
+    },
+    updateCardInBoard: (state, action) => {
+      // update nested data
+      // https://redux-toolkit.js.org/usage/immer-reducers#updating-nested-data
+      const incomingCard = action.payload
+
+      // tìm từ board > columns > cards
+      const column = state.currentActiveBoard.columns.find(col => col._id === incomingCard.columnId)
+      if (column) {
+        const card = column.cards.find(card => card._id === incomingCard._id)
+        if (card) {
+          Object.keys(incomingCard).forEach(key => {
+            card[key] = incomingCard[key]
+          })
+        }
+      }
     }
   },
 
@@ -66,7 +82,7 @@ export const activeBoardSlice = createSlice({
 })
 
 //active: là nơi danh cho các components bên dưới gọi bằng dispatch() tới nó để cập nhật lại dữ liệu thông qua reducer (chạy đồng bộ)
-export const { updateCurrentActiveBoard } = activeBoardSlice.actions
+export const { updateCurrentActiveBoard, updateCardInBoard } = activeBoardSlice.actions
 
 // selectors: là nơi dành cho các components bên dưới gọi bằng hook useSelector() để lấy dữ liệu trong kho Redux store
 export const selectCurrentActiveBoard = (state) => {

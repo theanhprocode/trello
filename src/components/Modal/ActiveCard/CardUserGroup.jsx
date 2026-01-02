@@ -20,16 +20,15 @@ function CardUserGroup({ cardMemberIds = [] }) {
     else setAnchorPopoverElement(null)
   }
 
-  // Lưu ý ở đây chúng ta không dùng Component AvatarGroup của MUI bởi nó không hỗ trợ tốt trong việc chúng ta cần custom & trigger xử lý phần tử tính toán cuối, đơn giản là cứ dùng Box và CSS - Style đám Avatar cho chuẩn kết hợp tính toán một chút thôi.
   return (
     <Box sx={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
       {/* Hiển thị các user là thành viên của card */}
       {[...Array(8)].map((_, index) =>
-        <Tooltip title="trungquandev" key={index}>
+        <Tooltip title="theanh" key={index}>
           <Avatar
             sx={{ width: 34, height: 34, cursor: 'pointer' }}
-            alt="trungquandev"
-            src="https://trungquandev.com/wp-content/uploads/2019/06/trungquandev-cat-avatar.png"
+            alt="theanh"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSok79g7IAwxiudSbfu5onc7GkndvKsDmqWCkm-tT6IT51kM6K91lCCG3KjmOSaBPY7FKl_CuRSpFHO8plADQbyMxgXeGnE_p4PEuDK7jZW&s=10"
           />
         </Tooltip>
       )}
@@ -71,7 +70,7 @@ function CardUserGroup({ cardMemberIds = [] }) {
       >
         <Box sx={{ p: 2, maxWidth: '260px', display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
           {[...Array(16)].map((_, index) =>
-            <Tooltip title="trungquandev" key={index}>
+            <Tooltip title="theanh" key={index}>
               {/* Cách làm Avatar kèm badge icon: https://mui.com/material-ui/react-avatar/#with-badge */}
               <Badge
                 sx={{ cursor: 'pointer' }}
@@ -81,8 +80,8 @@ function CardUserGroup({ cardMemberIds = [] }) {
               >
                 <Avatar
                   sx={{ width: 34, height: 34 }}
-                  alt="trungquandev"
-                  src="https://trungquandev.com/wp-content/uploads/2019/06/trungquandev-cat-avatar.png"
+                  alt="theanh"
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSok79g7IAwxiudSbfu5onc7GkndvKsDmqWCkm-tT6IT51kM6K91lCCG3KjmOSaBPY7FKl_CuRSpFHO8plADQbyMxgXeGnE_p4PEuDK7jZW&s=10"
                 />
               </Badge>
             </Tooltip>
