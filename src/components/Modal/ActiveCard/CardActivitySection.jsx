@@ -14,7 +14,7 @@ function CardActivitySection() {
   const handleAddCardComment = (event) => {
     // Bắt hành động người dùng nhấn phím Enter && không phải hành động Shift + Enter
     if (event.key === 'Enter' && !event.shiftKey) {
-      event.preventDefault() // Thêm dòng này để khi Enter không bị nhảy dòng
+      event.preventDefault() // Khi Enter không bị nhảy dòng
       if (!event.target?.value) return // Nếu không có giá trị gì thì return không làm gì cả
 
       // Tạo một biến commend data để gửi api
@@ -52,16 +52,16 @@ function CardActivitySection() {
       }
       {[...Array(6)].map((_, index) =>
         <Box sx={{ display: 'flex', gap: 1, width: '100%', mb: 1.5 }} key={index}>
-          <Tooltip title="trungquandev">
+          <Tooltip title="theanh">
             <Avatar
               sx={{ width: 36, height: 36, cursor: 'pointer' }}
-              alt="trungquandev"
-              src="https://trungquandev.com/wp-content/uploads/2019/06/trungquandev-cat-avatar.png"
+              alt="theanh"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSok79g7IAwxiudSbfu5onc7GkndvKsDmqWCkm-tT6IT51kM6K91lCCG3KjmOSaBPY7FKl_CuRSpFHO8plADQbyMxgXeGnE_p4PEuDK7jZW&s=10"
             />
           </Tooltip>
           <Box sx={{ width: 'inherit' }}>
             <Typography variant="span" sx={{ fontWeight: 'bold', mr: 1 }}>
-              Quan Do
+              theanh
             </Typography>
 
             <Typography variant="span" sx={{ fontSize: '12px' }}>
