@@ -166,14 +166,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👨‍💻 Author
 
 **AnhThe** - [@theanhprocode](https://github.com/theanhprocode)
-
-## 🙏 Acknowledgments
-
-- [TrungQuanDev](https://youtube.com/@trungquandev) - Original tutorial inspiration
-- [Material-UI](https://mui.com/) - Amazing React component library
-- [Redux Toolkit](https://redux-toolkit.js.org/) - Efficient Redux development
-- [@dnd-kit](https://dndkit.com/) - Modern drag-and-drop solution
-
----
-
-⭐ **If you found this project helpful, please give it a star!** ⭐

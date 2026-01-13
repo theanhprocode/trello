@@ -4,17 +4,20 @@ import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
+import React from 'react'
 
 import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 
-function CardActivitySection() {
+function CardActivitySection({ cardComments=[], onAddCardComment }) {
   const currentUser = useSelector(selectCurrentUser)
+  const isSubmittingRef = React.useRef(false)
 
   const handleAddCardComment = (event) => {
     // Bắt hành động người dùng nhấn phím Enter && không phải hành động Shift + Enter
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault() // Khi Enter không bị nhảy dòng
+      if (isSubmittingRef.current) return // Nếu đang trong quá trình submit thì không làm gì cả
       if (!event.target?.value) return // Nếu không có giá trị gì thì return không làm gì cả
 
       // Tạo một biến commend data để gửi api
@@ -23,7 +26,17 @@ function CardActivitySection() {
         userDisplayName: currentUser?.displayName,
         content: event.target.value.trim()
       }
-      console.log(commentToAdd)
+      isSubmittingRef.current = true
+
+      // Gọi lên Props ở component cha để xử lý thêm comment
+      onAddCardComment(commentToAdd)
+        .then(() => {
+          // Clear giá trị trong input comment sau khi thêm thành công
+          event.target.value = ''
+        })
+        .finally(() => {
+          isSubmittingRef.current = false
+        })
     }
   }
 
@@ -47,25 +60,25 @@ function CardActivitySection() {
       </Box>
 
       {/* Hiển thị danh sách các comments */}
-      {[...Array(0)].length === 0 &&
+      {cardComments.length === 0 &&
         <Typography sx={{ pl: '45px', fontSize: '14px', fontWeight: '500', color: '#b1b1b1' }}>No activity found!</Typography>
       }
-      {[...Array(6)].map((_, index) =>
+      {cardComments.map((comment, index) =>
         <Box sx={{ display: 'flex', gap: 1, width: '100%', mb: 1.5 }} key={index}>
-          <Tooltip title="theanh">
+          <Tooltip title={comment.userDisplayName}>
             <Avatar
               sx={{ width: 36, height: 36, cursor: 'pointer' }}
-              alt="theanh"
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSok79g7IAwxiudSbfu5onc7GkndvKsDmqWCkm-tT6IT51kM6K91lCCG3KjmOSaBPY7FKl_CuRSpFHO8plADQbyMxgXeGnE_p4PEuDK7jZW&s=10"
+              alt={comment.userDisplayName}
+              src={comment.userAvatar}
             />
           </Tooltip>
           <Box sx={{ width: 'inherit' }}>
             <Typography variant="span" sx={{ fontWeight: 'bold', mr: 1 }}>
-              theanh
+              {comment.userDisplayName}
             </Typography>
 
             <Typography variant="span" sx={{ fontSize: '12px' }}>
-              {moment().format('llll')}
+              {moment(comment.commentedAt).format('llll')}
             </Typography>
 
             <Box sx={{
@@ -78,7 +91,7 @@ function CardActivitySection() {
               wordBreak: 'break-word',
               boxShadow: '0 0 1px rgba(0, 0, 0, 0.2)'
             }}>
-              This is a comment!
+              {comment.content}
             </Box>
           </Box>
         </Box>

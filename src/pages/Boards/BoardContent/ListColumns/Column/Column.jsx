@@ -178,7 +178,7 @@ function Column({ column, deleteCardDetails, updateCardTitle }) {
           ml: 2,
           borderRadius: '6px',
           height: 'fit-content',
-          maxHeight: (theme) => `calc(${theme.customStyles.boardContentHeight} - ${theme.spacing(5)})`
+          maxHeight: (theme) => `calc(${theme.customStyles.boardContentHeight} - ${theme.spacing(2)})`
         }}>
         <Box sx={{
           // height: (theme) => theme.customStyles.columnHeaderHeight,

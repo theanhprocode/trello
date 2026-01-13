@@ -1,15 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  currentActiveCard: null // Chứa thông tin của thẻ đang được mở trong modal
+  currentActiveCard: null, // Chứa thông tin của thẻ đang được mở trong modal
+  isShowModalActiveCard: false
 }
 
 export const activeCardSlice = createSlice({
   name: 'activeCard',
   initialState,
   reducers: {
-    clearCurrentActiveCard: (state) => {
+
+    showModalActiveCard: (state) => {
+      state.isShowModalActiveCard = true
+    },
+
+    clearAndHideCurrentActiveCard: (state) => {
       state.currentActiveCard = null
+      state.isShowModalActiveCard = false
     },
 
     updateCurrentActiveCard: (state, action) => {
@@ -22,10 +29,16 @@ export const activeCardSlice = createSlice({
   extraReducers: (builder) => {}
 })
 
-export const { clearCurrentActiveCard, updateCurrentActiveCard } = activeCardSlice.actions
+export const { clearAndHideCurrentActiveCard, updateCurrentActiveCard, showModalActiveCard } = activeCardSlice.actions
 
+
+// Selectors là nơi để các component có thể lấy dữ liệu từ redux store
 export const selectCurrentActiveCard = (state) => {
   return state.activeCard.currentActiveCard
+}
+
+export const selectIsShowModalActiveCard = (state) => {
+  return state.activeCard.isShowModalActiveCard
 }
 
 export const activeCardReducer = activeCardSlice.reducer

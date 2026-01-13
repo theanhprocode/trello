@@ -22,7 +22,7 @@ import Box from '@mui/material/Box'
 import CloseIcon from '@mui/icons-material/Close'
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline'
 import { useDispatch } from 'react-redux'
-import { updateCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
+import { updateCurrentActiveCard, showModalActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 function Card({ card, deleteCardDetails, updateCardTitle }) {
   const dispatch = useDispatch()
@@ -126,6 +126,8 @@ function Card({ card, deleteCardDetails, updateCardTitle }) {
 
   const setActiveCard = () => {
     dispatch(updateCurrentActiveCard(card))
+    // hiện modal được quản lý bên ActiveCard.jsx
+    dispatch(showModalActiveCard())
   }
 
   return (
