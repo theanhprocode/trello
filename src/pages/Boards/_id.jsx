@@ -10,13 +10,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
 import ActiveCard from '~/components/Modal/ActiveCard/ActiveCard.jsx'
-import { selectCurrentActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 
 function Board() {
   const dispatch = useDispatch()
   const board = useSelector(selectCurrentActiveBoard)
-  const activeCard = useSelector(selectCurrentActiveCard)
   // const [board, setBoard] = useState(null)
 
   const { boardId } = useParams() // Lấy boardId từ URL nếu cần thiết
@@ -175,9 +173,8 @@ function Board() {
 
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
-      {/* modal active card, check đóng/mở dựa theo điều kiện có tồn tại data active card
-      lưu trong redux hay không thì mới render. Mỗi thời điểm chỉ có 1 modal active card */}
-      {activeCard && <ActiveCard />}
+      {/* modal active card, check đóng/mở dựa theo state isShowModalActiveCard trong redux */}
+      {<ActiveCard />}
 
       <AppBar/>
       <BoardBar board={board}/>
