@@ -62,6 +62,12 @@ function LoginForm() {
           <Box sx={{ marginTop: '1em', display: 'flex', justifyContent: 'center', color: theme => theme.palette.grey[500] }}>
             Author: theanh
           </Box>
+          <Box>
+            <Typography align="center" sx={{ marginTop: '0.5em', fontWeight: 'bold' }}>
+              Enter email: theanh2172003@gmail.com <br />
+              password: theanh217
+            </Typography>
+          </Box>
           <Box sx={{ marginTop: '1em', display: 'flex', justifyContent: 'center', flexDirection: 'column', padding: '0 1em' }}>
             {verifiedEmail &&
               <Alert severity="success" sx={{ '.MuiAlert-message': { overflow: 'hidden' } }}>

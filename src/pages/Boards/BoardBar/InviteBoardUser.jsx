@@ -9,7 +9,8 @@ import TextField from '@mui/material/TextField'
 import { useForm } from 'react-hook-form'
 import { EMAIL_RULE, FIELD_REQUIRED_MESSAGE, EMAIL_RULE_MESSAGE } from '~/utilities/validators'
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
-function InviteBoardUser() {
+import { inviteUserToBoardAPI } from '~/apis'
+function InviteBoardUser({ boardId }) {
   /**
    * Xử lý Popover để ẩn hoặc hiện một popup nhỏ
    * https://mui.com/material-ui/react-popover/
@@ -25,11 +26,13 @@ function InviteBoardUser() {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm()
   const submitInviteUserToBoard = (data) => {
     const { inviteeEmail } = data
-    console.log('inviteeEmail:', inviteeEmail)
+    // console.log ('Invite user to board with email:', inviteeEmail)
 
-    // Clear thẻ input sử dụng react-hook-form bằng setValue
-    setValue('inviteeEmail', null)
-    setAnchorPopoverElement(null)
+    inviteUserToBoardAPI({ boardId, inviteeEmail }).then(() => {
+      // Clear thẻ input sử dụng react-hook-form bằng setValue
+      setValue('inviteeEmail', null)
+      setAnchorPopoverElement(null)
+    })
   }
 
   return (

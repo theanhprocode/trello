@@ -18,7 +18,7 @@ function ListCards({ cards, deleteCardDetails, updateCardTitle }) {
           ${theme.customStyles.boardContentHeight} -
           ${theme.spacing(5)} -
           ${theme.customStyles.columnHeaderHeight} -
-          ${theme.customStyles.columnFooterHeight}
+          ${theme.customStyles.columnFooterHeight} - ${theme.spacing(2)}
         )`,
         '&::-webkit-scrollbar-thumb': { backgroundColor: '#ced0da' },
         '&::-webkit-scrollbar-thumb:hover': { backgroundColor: '#bfc2cf' }
