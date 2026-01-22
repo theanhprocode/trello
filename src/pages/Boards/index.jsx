@@ -14,14 +14,13 @@ import HomeIcon from '@mui/icons-material/Home'
 import ArrowRightIcon from '@mui/icons-material/ArrowRight'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import CardMedia from '@mui/material/CardMedia'
 import Pagination from '@mui/material/Pagination'
 import PaginationItem from '@mui/material/PaginationItem'
 import { Link, useLocation } from 'react-router-dom'
 import randomColor from 'randomcolor'
 import SidebarCreateBoardModal from './create'
 import { fetchBoardsAPI } from '~/apis/index'
-import { DEFAULT_PAGE, DEFAULT_ITEM_PER_PAGE } from '~/utilities/constans'
+import { DEFAULT_PAGE, DEFAULT_ITEM_PER_PAGE } from '~/utilities/constants'
 
 import { styled } from '@mui/material/styles'
 // Styles của Sidebar item menu
@@ -73,7 +72,7 @@ function Boards() {
     // Fake tạm giả sử trong Database trả về có tổng 100 bản ghi boards
     // setTotalBoards(100)
 
-    console.log(location.search)
+    // console.log(location.search)
 
     // Gọi API lấy danh sách boards ở đây...
     fetchBoardsAPI(location.search).then(updateStateData)
