@@ -1,5 +1,5 @@
 import authorizedAxiosInstance from '~/utilities/authorizeAxios'
-import { API_ROOT } from '~/utilities/constans'
+import { API_ROOT } from '~/utilities/constants'
 import { toast } from 'react-toastify'
 // import axios from 'axios'
 
