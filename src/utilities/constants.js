@@ -3,11 +3,11 @@ let apiRoot = ''
 
 // console.log('process.env', process.env)
 
-if (import.meta.env.DEV) {
+if (process.env.BUILD_MODE === 'dev') {
   apiRoot = 'http://localhost:8017'
 }
 
-if (import.meta.env.PROD) {
+if (process.env.BUILD_MODE === 'production') {
   apiRoot = '/api'
 }
 console.log('🚀 ~ apiRoot:', apiRoot)
