@@ -1,19 +1,15 @@
 {
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/:path*",
-      "destination": "https://trello-api-wd33.onrender.com/:path*"
-    }
-  ],
-  "headers": [
+      "src": "/api/(.*)",
+      "dest": "https://trello-api-wd33.onrender.com/$1"
+    },
     {
-      "source": "/assets/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
