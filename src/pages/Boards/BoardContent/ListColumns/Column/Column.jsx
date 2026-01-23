@@ -301,6 +301,12 @@ function Column({ column, deleteCardDetails, updateCardTitle }) {
                 data-no-dnd="true"
                 value={newCardTitle}
                 onChange={(e) => setNewCardTitle(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault()
+                    addNewCard()
+                  }
+                }}
                 sx={{
                   '& label': { color: 'text.primary' },
                   '& input': { color: (theme) => theme.palette.primary.main, backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#333643' : 'white' },
