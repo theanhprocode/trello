@@ -4,5 +4,16 @@
       "source": "/api/:path*",
       "destination": "https://trello-api-wd33.onrender.com/:path*"
     }
+  ],
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "routes": [
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
   ]
 }
