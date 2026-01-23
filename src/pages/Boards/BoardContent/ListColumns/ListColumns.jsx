@@ -115,6 +115,12 @@ function ListColumns({ columns, deleteCardDetails, updateCardTitle, updateColumn
                 autoFocus
                 value={newColumnTitle}
                 onChange={(e) => setNewColumnTitle(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault()
+                    addNewColumn()
+                  }
+                }}
                 sx={{
                   '& label': { color: 'white' },
                   '& input': { color: 'white' },

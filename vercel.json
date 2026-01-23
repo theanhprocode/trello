@@ -3,6 +3,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://trello-api-wd33.onrender.com/:path*"
+    },
+    {
+      "source": "/:path*",
+      "destination": "/index.html"
     }
   ]
 }
