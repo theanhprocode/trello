@@ -14,7 +14,7 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd'
 import DoneIcon from '@mui/icons-material/Done'
 import NotInterestedIcon from '@mui/icons-material/NotInterested'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchInvitationAPI, selectCurrentNotifications } from '~/redux/notifications/notificationsSlice'
+import { fetchInvitationAPI, selectCurrentNotifications, updateBoardInvitationAPI } from '~/redux/notifications/notificationsSlice'
 
 const BOARD_INVITATION_STATUS = {
   PENDING: 'PENDING',
@@ -40,9 +40,14 @@ function Notifications() {
     dispatch(fetchInvitationAPI())
   }, [dispatch])
 
+  // Cập nhật trạng thái của invitation
   const updateBoardInvitation = (status, invitationId) => {
     console.log('status: ', status)
     console.log('invitationId: ', invitationId)
+    dispatch(updateBoardInvitationAPI({ status, invitationId }))
+      .then(res => {
+        console.log('Update invitation result: ', res)
+      })
   }
 
   return (
