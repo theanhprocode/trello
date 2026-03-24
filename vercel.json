@@ -1,10 +1,6 @@
 {
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "https://trello-api-wd33.onrender.com/$1"
-    },
-    {
       "source": "/((?!assets/|favicon|.*\\.js$|.*\\.css$|.*\\.png$|.*\\.jpg$|.*\\.svg$|.*\\.ico$|.*\\.woff2?$).*)",
       "destination": "/index.html"
     }
