@@ -4,12 +4,12 @@ let socketUrl = ''
 
 // console.log('process.env', process.env)
 
-if (process.env.BUILD_MODE === 'dev') {
+if (import.meta.env.BUILD_MODE === 'dev') {
   apiRoot = 'http://localhost:8017'
   socketUrl = 'http://localhost:8017'
 }
 
-if (process.env.BUILD_MODE === 'production') {
+if (import.meta.env.BUILD_MODE === 'production') {
   apiRoot = 'https://trello-api-wd33.onrender.com'
   socketUrl = 'https://trello-api-wd33.onrender.com'
 }
