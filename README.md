@@ -1,78 +1,75 @@
 # Trello Clone
 
-A project management web app inspired by Trello, built as a full-stack project to practice React and related technologies.
+Ứng dụng quản lý công việc lấy cảm hứng từ Trello, xây dựng để thực hành React và các công nghệ liên quan.
 
-**Live demo:** https://trello-rose-zeta.vercel.app
+**Demo:** https://trello-rose-zeta.vercel.app
 
-## About
+## Giới thiệu
 
-This is the frontend of a Trello clone that supports:
+Đây là phần frontend của một bản clone Trello, hỗ trợ:
 
-- Boards with columns and cards
-- Drag & drop columns and cards (including moving cards between columns)
-- User authentication (register, email verification, login/logout)
-- Token refresh flow (access token + refresh token)
-- Real-time notifications via Socket.io (board invitations)
-- Card details: cover image upload, markdown description, comments
-- Invite users to boards (accept/reject)
-- Pagination for board listing
-- Dark mode / Light mode toggle
-- Responsive layout with Material UI
+- Board chứa các column và card
+- Kéo thả column và card (bao gồm kéo card giữa các column)
+- Đăng ký, xác thực email, đăng nhập/đăng xuất
+- Tự động refresh token khi hết hạn
+- Thông báo realtime qua Socket.io (mời vào board)
+- Chi tiết card: upload ảnh bìa, mô tả markdown, bình luận
+- Mời thành viên vào board (chấp nhận/từ chối)
+- Phân trang danh sách board
+- Chuyển đổi Dark mode / Light mode
 
-## Tech Stack
+## Công nghệ sử dụng
 
 **Frontend:**
 - React 18 + Vite
 - Redux Toolkit + Redux Persist
 - Material UI v5
 - React Router v6
-- Axios (with interceptors for auth)
-- dnd-kit (drag & drop)
+- Axios (interceptor xử lý auth)
+- dnd-kit (kéo thả)
 - Socket.io Client
 - React Hook Form
 - React Markdown Editor (@uiw/react-md-editor)
 
-**Backend:** Node.js + Express + MongoDB (separate repo, deployed on Render)
+**Backend:** Node.js + Express + MongoDB (repo riêng, deploy trên Render)
 
-## Getting Started
+## Cài đặt
 
 ```bash
 # Clone repo
 git clone <repo-url>
 cd trello
 
-# Install dependencies
+# Cài dependencies
 yarn install
 
-# Run dev server (requires backend running on localhost:8017)
+# Chạy dev server (cần backend chạy ở localhost:8017)
 yarn dev
 ```
 
-The app will be available at `http://localhost:5173`.
-
-## Project Structure
+## Cấu trúc thư mục
 
 ```
 src/
-  apis/            # API call functions (axios)
-  assets/          # Static assets (images, etc.)
-  components/      # Shared components (AppBar, Modal, Form, ...)
+  apis/            # Các hàm gọi API (axios)
+  assets/          # Ảnh, icon tĩnh
+  components/      # Component dùng chung (AppBar, Modal, Form, ...)
   customHooks/     # Custom React hooks
   customLibraries/ # Custom dnd-kit sensors
-  pages/           # Page components (Auth, Boards, Settings, Users, 404)
-  redux/           # Redux store, slices (activeBoard, activeCard, user, notifications)
-  utilities/       # Constants, formatters, validators, axios config
+  pages/           # Các trang (Auth, Boards, Settings, Users, 404)
+  redux/           # Redux store và các slice (activeBoard, activeCard, user, notifications)
+  utilities/       # Hằng số, formatter, validator, cấu hình axios
 ```
 
-## Environment
+## Môi trường
 
-- Dev: API calls go to `http://localhost:8017`
-- Production: API calls go to `https://trello-api-wd33.onrender.com`
+- Dev: `http://localhost:8017`
+- Production: `https://trello-api-wd33.onrender.com`
 
-Handled automatically via `import.meta.env.DEV` / `import.meta.env.PROD` (Vite built-in).
+Tự động xử lý qua `import.meta.env.DEV` / `import.meta.env.PROD` của Vite.
 
-## Deployment
+## Deploy
 
-Frontend is deployed on **Vercel**. SPA routing is configured in `vercel.json`.
+Frontend deploy trên **Vercel**, cấu hình SPA routing trong `vercel.json`.
 
-Backend is deployed on **Render**.
+Backend deploy trên **Render**.
