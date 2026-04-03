@@ -63,10 +63,10 @@ function LoginForm() {
             Author: theanh
           </Box>
           <Box>
-            {/* <Typography align="center" sx={{ marginTop: '0.5em', fontWeight: 'bold' }}>
-              Enter email: theanh2172003@gmail.com <br />
-              password: theanh217
-            </Typography> */}
+            <Typography align="center" sx={{ marginTop: '0.5em', fontWeight: 'bold' }}>
+              Enter email: test123@gmail.com <br />
+              password: test1234
+            </Typography>
           </Box>
           <Box sx={{ marginTop: '1em', display: 'flex', justifyContent: 'center', flexDirection: 'column', padding: '0 1em' }}>
             {verifiedEmail &&
