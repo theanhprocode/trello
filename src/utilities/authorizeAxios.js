@@ -49,7 +49,10 @@ authorizedAxiosInstance.interceptors.response.use((response) => {
 
     // TH1: nếu lỗi 401 (Unauthorized) -> gọi api logout
     if (error.response?.status === 401) {
-      axiosReduxStore.dispatch(logoutUserAPI(false))
+      const currentUser = axiosReduxStore.getState().user.currentUser
+      if (currentUser) {
+        axiosReduxStore.dispatch(logoutUserAPI(false))
+      }
     }
 
     // TH2: nếu lỗi 410 (Token expired) -> gọi api refreshToken làm mới accessToken
