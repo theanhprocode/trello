@@ -33,7 +33,7 @@ import CardActivitySection from './CardActivitySection'
 import { useDispatch, useSelector } from 'react-redux'
 import { clearAndHideCurrentActiveCard, selectCurrentActiveCard, updateCurrentActiveCard, selectIsShowModalActiveCard } from '~/redux/activeCard/activeCardSlice'
 import { updateCardDetailsAPI } from '~/apis'
-import { updateCardInBoard } from '~/redux/activeBoard/activeBoardSlice'
+import { selectCurrentActiveBoard, updateCardInBoard } from '~/redux/activeBoard/activeBoardSlice'
 
 
 import { styled } from '@mui/material/styles'
@@ -61,6 +61,7 @@ function ActiveCard() {
   const dispatch = useDispatch()
   const activeCard = useSelector(selectCurrentActiveCard)
   const isShowModalActiveCard = useSelector(selectIsShowModalActiveCard)
+  const board = useSelector(selectCurrentActiveBoard)
 
   // check bên Board/_id.jsx
   // const [isOpen, setIsOpen] = useState(true)
@@ -88,6 +89,10 @@ function ActiveCard() {
 
   const onAddCardComment = async (commentToAdd) => {
     await callApiUpdateCard({ commentToAdd })
+  }
+
+  const onUpdateCardMembers = async () => {
+    //
   }
 
   const onUpdateCardDescription = (newDescription) => {
@@ -166,7 +171,11 @@ function ActiveCard() {
               <Typography sx={{ fontWeight: '600', color: 'primary.main', mb: 1 }}>Members</Typography>
 
               {/* Feature 02: Xử lý các thành viên của Card */}
-              <CardUserGroup />
+              <CardUserGroup
+                cardMemberIds={activeCard?.memberIds}
+                board={board}
+                onUpdateCardMembers={onUpdateCardMembers}
+              />
             </Box>
 
             <Box sx={{ mb: 3 }}>

@@ -333,7 +333,7 @@ function BoardContent({ board, moveColumns, moveCardInTheSameColumn, moveCardToD
         '&::-webkit-scrollbar-track': { m: 2 }
       }}>
         <ListColumns columns={orderedColumns} deleteCardDetails={deleteCardDetails} updateCardTitle={updateCardTitle} updateColumnTitle={updateColumnTitle} />
-        <DragOverlay dropAnimation={dropAnimation}>
+        <DragOverlay dropAnimation={dropAnimation} style={{ rotate: '3deg' }}>
           {(!activeDragItemType) && null}
           {(activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) && <Column column={activeDragItemData} />}
           {(activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) && <Card card={activeDragItemData} />}
