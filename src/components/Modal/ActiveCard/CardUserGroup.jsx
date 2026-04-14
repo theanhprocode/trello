@@ -23,10 +23,12 @@ function CardUserGroup({ cardMemberIds = [], board, onUpdateCardMembers }) {
     else setAnchorPopoverElement(null)
   }
 
+  const LIMIT = 5
+
   return (
     <Box sx={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-      {/* Nếu dưới 5 user: hiển thị toàn bộ boardUsers. Từ 5 trở lên: chỉ hiển thị cardMembers */}
-      {(boardUsers.length < 5 ? boardUsers : cardMembers).map(user =>
+      {/* Hiển thị tối đa 5 user */}
+      {boardUsers.slice(0, LIMIT).map(user =>
         <Tooltip title={user?.displayName} key={user._id}>
           <Avatar
             sx={{ width: 34, height: 34, cursor: 'pointer' }}
@@ -36,9 +38,9 @@ function CardUserGroup({ cardMemberIds = [], board, onUpdateCardMembers }) {
         </Tooltip>
       )}
 
-      {/* Nút này để mở popover thêm member - chỉ hiện khi có từ 5 user trở lên */}
-      {boardUsers.length >= 5 &&
-        <Tooltip title="Add new member">
+      {/* Nếu quá 5 user thì hiện +number */}
+      {boardUsers.length > LIMIT &&
+        <Tooltip title="Show more">
           <Box
             aria-describedby={popoverId}
             onClick={handleTogglePopover}
@@ -60,12 +62,12 @@ function CardUserGroup({ cardMemberIds = [], board, onUpdateCardMembers }) {
               }
             }}
           >
-            <AddIcon fontSize="small" />
+            +{boardUsers.length - LIMIT}
           </Box>
         </Tooltip>
       }
 
-      {/* Khi Click vào + ở trên thì sẽ mở popover hiện toàn bộ users trong board để người dùng Click chọn thêm vào card  */}
+      {/* Popover hiện những user còn lại (từ vị trí LIMIT trở đi) */}
       <Popover
         id={popoverId}
         open={isOpenPopover}
@@ -74,24 +76,13 @@ function CardUserGroup({ cardMemberIds = [], board, onUpdateCardMembers }) {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
         <Box sx={{ p: 2, maxWidth: '260px', display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
-          {boardUsers.map(user =>
+          {boardUsers.slice(LIMIT).map(user =>
             <Tooltip title={user?.displayName} key={user._id}>
-              <Badge
-                sx={{ cursor: 'pointer' }}
-                overlap="rectangular"
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                badgeContent={
-                  cardMemberIds.includes(user._id)
-                    ? <CheckCircleIcon fontSize="small" sx={{ color: '#27ae60' }} />
-                    : null
-                }
-              >
-                <Avatar
-                  sx={{ width: 34, height: 34 }}
-                  alt={user?.displayName}
-                  src={user?.avatar}
-                />
-              </Badge>
+              <Avatar
+                sx={{ width: 34, height: 34, cursor: 'pointer' }}
+                alt={user?.displayName}
+                src={user?.avatar}
+              />
             </Tooltip>
           )}
         </Box>
