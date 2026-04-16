@@ -6,6 +6,7 @@ import { combineReducers } from 'redux'
 import { persistReducer } from 'redux-persist'
 import { activeCardReducer } from './activeCard/activeCardSlice'
 import { notificationsReducer } from './notifications/notificationsSlice'
+import { onlineUsersReducer } from './onlineUsers/onlineUsersSlice'
 
 const rootPersistConfig = {
   key: 'root',
@@ -19,7 +20,8 @@ const reducers = combineReducers({
   activeBoard: activeBoardReducer,
   user: userReducer,
   activeCard: activeCardReducer,
-  notifications: notificationsReducer
+  notifications: notificationsReducer,
+  onlineUsers: onlineUsersReducer
 })
 
 const persistedReducer = persistReducer(rootPersistConfig, reducers)

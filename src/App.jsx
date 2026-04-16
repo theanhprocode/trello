@@ -1,13 +1,16 @@
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom'
+import { useEffect } from 'react'
 
 import Board from '~/pages/Boards/_id'
 import NotFound from '~/pages/404/NotFound'
 import Auth from '~/pages/Auth/Auth'
 import AccountVerification from '~/pages/Auth/AccountVerification'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 import Settings from '~/pages/Settings/Settings'
 import Boards from '~/pages/Boards/index'
+import { socketIoInstance } from '~/socketClient'
+import { updateOnlineUsers } from '~/redux/onlineUsers/onlineUsersSlice'
 
 
 const protectedRoute = ({ user }) => {
@@ -17,6 +20,24 @@ const protectedRoute = ({ user }) => {
 
 function App() {
   const currentUser = useSelector(selectCurrentUser)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (currentUser) {
+      // Emit userId khi user đã login
+      socketIoInstance.emit('FE_USER_ONLINE', currentUser._id)
+    }
+
+    // Lắng nghe danh sách user online từ server
+    const onUpdateOnlineList = (userIds) => {
+      dispatch(updateOnlineUsers(userIds))
+    }
+    socketIoInstance.on('BE_USER_ONLINE_LIST', onUpdateOnlineList)
+
+    return () => {
+      socketIoInstance.off('BE_USER_ONLINE_LIST', onUpdateOnlineList)
+    }
+  }, [currentUser, dispatch])
 
   return (
     <Routes>

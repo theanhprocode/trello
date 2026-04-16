@@ -6,10 +6,13 @@ import Popover from '@mui/material/Popover'
 import AddIcon from '@mui/icons-material/Add'
 import Badge from '@mui/material/Badge'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import { useSelector } from 'react-redux'
+import { selectOnlineUserIds } from '~/redux/onlineUsers/onlineUsersSlice'
 
 function CardUserGroup({ cardMemberIds = [], board, onUpdateCardMembers }) {
   const boardUsers = board?.FE_allUsers || []
   const cardMembers = boardUsers.filter(user => cardMemberIds.includes(user._id))
+  const onlineUserIds = useSelector(selectOnlineUserIds)
 
   /**
    * Xử lý Popover để ẩn hoặc hiện toàn bộ user trên một cái popup
@@ -30,11 +33,24 @@ function CardUserGroup({ cardMemberIds = [], board, onUpdateCardMembers }) {
       {/* Hiển thị tối đa 5 user */}
       {boardUsers.slice(0, LIMIT).map(user =>
         <Tooltip title={user?.displayName} key={user._id}>
-          <Avatar
-            sx={{ width: 34, height: 34, cursor: 'pointer' }}
-            alt={user?.displayName}
-            src={user?.avatar}
-          />
+          <Badge
+            overlap="circular"
+            variant="dot"
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            sx={{
+              '& .MuiBadge-badge': {
+                backgroundColor: onlineUserIds.includes(user._id) ? '#44b700' : '#bdbdbd',
+                width: 10, height: 10, borderRadius: '50%',
+                border: '2px solid white'
+              }
+            }}
+          >
+            <Avatar
+              sx={{ width: 34, height: 34, cursor: 'pointer' }}
+              alt={user?.displayName}
+              src={user?.avatar}
+            />
+          </Badge>
         </Tooltip>
       )}
 
@@ -78,11 +94,24 @@ function CardUserGroup({ cardMemberIds = [], board, onUpdateCardMembers }) {
         <Box sx={{ p: 2, maxWidth: '260px', display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
           {boardUsers.slice(LIMIT).map(user =>
             <Tooltip title={user?.displayName} key={user._id}>
-              <Avatar
-                sx={{ width: 34, height: 34, cursor: 'pointer' }}
-                alt={user?.displayName}
-                src={user?.avatar}
-              />
+              <Badge
+                overlap="circular"
+                variant="dot"
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                sx={{
+                  '& .MuiBadge-badge': {
+                    backgroundColor: onlineUserIds.includes(user._id) ? '#44b700' : '#bdbdbd',
+                    width: 10, height: 10, borderRadius: '50%',
+                    border: '2px solid white'
+                  }
+                }}
+              >
+                <Avatar
+                  sx={{ width: 34, height: 34, cursor: 'pointer' }}
+                  alt={user?.displayName}
+                  src={user?.avatar}
+                />
+              </Badge>
             </Tooltip>
           )}
         </Box>
