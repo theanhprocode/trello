@@ -1,30 +1,87 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import ModeSelect from '~/components/ModeSelect'
 import AppsIcon from '@mui/icons-material/Apps'
 import SvgIcon from '@mui/material/SvgIcon'
 import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
 import Typography from '@mui/material/Typography'
-import Workspaces from './Menus/Workspaces'
-import Recent from './Menus/Recent'
-import Starred from './Menus/Starred'
-import Templates from './Menus/Templates'
+// import Workspaces from './Menus/Workspaces'
+// import Recent from './Menus/Recent'
+// import Starred from './Menus/Starred'
+// import Templates from './Menus/Templates'
 import Profile from './Menus/Profile'
-import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
-import Badge from '@mui/material/Badge'
 import Tooltip from '@mui/material/Tooltip'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
-import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 import InputAdornment from '@mui/material/InputAdornment'
 import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
-import { Link } from 'react-router-dom'
+import Autocomplete from '@mui/material/Autocomplete'
+import CircularProgress from '@mui/material/CircularProgress'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Notifications from './Notifications/Notifications'
+import { fetchBoardsAPI } from '~/apis/index'
 
 function AppBar() {
   const [searchValue, setSearchValue] = useState('')
+  const [boardOptions, setBoardOptions] = useState([])
+  const [isSearching, setIsSearching] = useState(false)
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  useEffect(() => {
+    const query = new URLSearchParams(location.search)
+    setSearchValue(query.get('search') || '')
+  }, [location.search])
+
+  useEffect(() => {
+    const trimmedValue = searchValue.trim()
+
+    if (!trimmedValue) {
+      setBoardOptions([])
+      return undefined
+    }
+
+    const timerId = window.setTimeout(() => {
+      setIsSearching(true)
+      fetchBoardsAPI(`?search=${encodeURIComponent(trimmedValue)}&page=1&itemPerPage=5`)
+        .then((res) => {
+          setBoardOptions((res.boards || []).map((board) => ({
+            _id: board._id,
+            title: board.title,
+            description: board.description
+          })))
+        })
+        .catch(() => {
+          setBoardOptions([])
+        })
+        .finally(() => {
+          setIsSearching(false)
+        })
+    }, 300)
+
+    return () => window.clearTimeout(timerId)
+  }, [searchValue])
+
+  const handleSearchBoards = () => {
+    const trimmedValue = searchValue.trim()
+    const nextQuery = new URLSearchParams()
+
+    if (trimmedValue) {
+      nextQuery.set('search', trimmedValue)
+    }
+
+    nextQuery.set('page', '1')
+
+    const queryString = nextQuery.toString()
+    navigate(`/boards${queryString ? `?${queryString}` : ''}`)
+  }
+
+  const handleClearSearch = () => {
+    setSearchValue('')
+    setBoardOptions([])
+    navigate('/boards?page=1')
+  }
 
   return (
     <Box px={2} sx={{
@@ -60,37 +117,71 @@ function AppBar() {
 
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <TextField
-          id="outlined-search"
-          label="Search..."
-          type="text"
-          size='small'
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon sx={{ color: 'white' }} />
-              </InputAdornment>
-            ),
-            endAdornment: (
-              <InputAdornment position="end">
-                <CloseIcon onClick={() => setSearchValue('')} fontSize='small' sx={{ color: searchValue ? 'white' : 'transparent', cursor: 'pointer' }} />
-              </InputAdornment>
-            )
-          }}
-          sx={{
-            minWidth: '120px',
-            maxWidth: '170px',
-            '& label': { color: 'white' },
-            '& input': { color: 'white' },
-            '& label.Mui-focused': { color: 'white' },
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': { borderColor: 'white' },
-              '&:hover fieldset': { borderColor: 'white' },
-              '&.Mui-focused fieldset': { borderColor: 'white' }
+        <Autocomplete
+          id="board-search"
+          freeSolo
+          disablePortal
+          loading={isSearching}
+          options={boardOptions}
+          inputValue={searchValue}
+          onInputChange={(_, newInputValue) => setSearchValue(newInputValue)}
+          onChange={(_, selectedOption) => {
+            if (selectedOption && typeof selectedOption !== 'string' && selectedOption._id) {
+              setSearchValue(selectedOption.title)
+              navigate(`/boards/${selectedOption._id}`)
             }
           }}
+          getOptionLabel={(option) => {
+            if (typeof option === 'string') return option
+            return option.title || ''
+          }}
+          isOptionEqualToValue={(option, value) => option._id === value._id}
+          renderOption={(props, option) => (
+            <Box component="li" {...props} key={option._id}>
+              <Box>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>{option.title}</Typography>
+                {option.description && (
+                  <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
+                    {option.description}
+                  </Typography>
+                )}
+              </Box>
+            </Box>
+          )}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Search..."
+              size="small"
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  event.preventDefault()
+                  handleSearchBoards()
+                }
+              }}
+              InputProps={{
+                ...params.InputProps,
+                startAdornment: (
+                  <InputAdornment position="start" onClick={handleSearchBoards} sx={{ cursor: 'pointer' }}>
+                    <SearchIcon sx={{ color: 'white' }} />
+                  </InputAdornment>
+                )
+              }}
+              sx={{
+                minWidth: '180px',
+                maxWidth: '260px',
+                '& label': { color: 'white' },
+                '& input': { color: 'white' },
+                '& label.Mui-focused': { color: 'white' },
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': { borderColor: 'white' },
+                  '&:hover fieldset': { borderColor: 'white' },
+                  '&.Mui-focused fieldset': { borderColor: 'white' }
+                }
+              }}
+            />
+          )}
+          sx={{ minWidth: '180px', maxWidth: '260px' }}
         />
 
         <ModeSelect/>
