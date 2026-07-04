@@ -59,6 +59,32 @@ function Boards() {
    * Hàm parseInt cần tham số thứ 2 là Hệ thập phân (hệ đếm cơ số 10) để đảm bảo chuẩn số cho phân trang
    */
   const page = parseInt(query.get('page') || '1', 10)
+  const searchValue = query.get('search') || ''
+
+  const buildBoardsApiQuery = () => {
+    const params = new URLSearchParams()
+    params.set('page', String(page))
+    params.set('itemPerPage', String(DEFAULT_ITEM_PER_PAGE))
+
+    if (searchValue) {
+      params.set('search', searchValue)
+    }
+
+    return `?${params.toString()}`
+  }
+
+  const buildBoardListPath = (pageNumber) => {
+    const nextQuery = new URLSearchParams(location.search)
+
+    if (Number.isInteger(pageNumber)) {
+      nextQuery.set('page', String(pageNumber))
+    } else {
+      nextQuery.delete('page')
+    }
+
+    const queryString = nextQuery.toString()
+    return `/boards${queryString ? `?${queryString}` : ''}`
+  }
 
   const updateStateData = (res) => {
     setBoards(res.boards || [])
@@ -75,12 +101,12 @@ function Boards() {
     // console.log(location.search)
 
     // Gọi API lấy danh sách boards ở đây...
-    fetchBoardsAPI(location.search).then(updateStateData)
-  }, [location.search])
+    fetchBoardsAPI(buildBoardsApiQuery()).then(updateStateData)
+  }, [location.search, page, searchValue])
 
   const afterCreateNewBoard = () => {
     // fetch lại danh sách boards sau khi tạo mới thành công
-    fetchBoardsAPI(location.search).then(updateStateData)
+    fetchBoardsAPI(buildBoardsApiQuery()).then(updateStateData)
   }
 
   // Lúc chưa tồn tại boards > đang chờ gọi api thì hiện loading
@@ -178,7 +204,7 @@ function Boards() {
                   renderItem={(item) => (
                     <PaginationItem
                       component={Link}
-                      to={`/boards${item.page === DEFAULT_PAGE ? '' : `?page=${item.page}`}`}
+                      to={buildBoardListPath(item.page)}
                       {...item}
                     />
                   )}
