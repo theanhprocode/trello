@@ -92,3 +92,9 @@ export const inviteUserToBoardAPI = async (data) => {
   toast.success('Invitation sent successfully!')
   return response.data
 }
+
+export const deleteInvitationAPI = async (invitationId) => {
+  const response = await authorizedAxiosInstance.delete(`${API_ROOT}/v1/invitations/board/${invitationId}`)
+  toast.success('Invitation deleted successfully!')
+  return response.data
+}

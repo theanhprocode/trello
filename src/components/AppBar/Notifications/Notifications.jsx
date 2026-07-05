@@ -13,12 +13,14 @@ import Divider from '@mui/material/Divider'
 import GroupAddIcon from '@mui/icons-material/GroupAdd'
 import DoneIcon from '@mui/icons-material/Done'
 import NotInterestedIcon from '@mui/icons-material/NotInterested'
+import CloseIcon from '@mui/icons-material/Close'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 import { socketIoInstance } from '~/socketClient'
-import { addNotifications } from '~/redux/notifications/notificationsSlice'
+import { addNotifications, clearCurrentNotifications, removeNotification } from '~/redux/notifications/notificationsSlice'
 import { useNavigate } from 'react-router-dom'
 import { fetchInvitationAPI, selectCurrentNotifications, updateBoardInvitationAPI } from '~/redux/notifications/notificationsSlice'
+import { deleteInvitationAPI } from '~/apis/index'
 
 const BOARD_INVITATION_STATUS = {
   PENDING: 'PENDING',
@@ -38,6 +40,7 @@ function Notifications() {
   }
 
   const [newNotification, setNewNotification] = useState(false)
+  const [isClearingAll, setIsClearingAll] = useState(false)
 
   // lấy thông tin user hiện tại từ Redux
   const currentUser = useSelector(selectCurrentUser)
@@ -71,10 +74,35 @@ function Notifications() {
 
   }, [dispatch, currentUser._id])
 
+  const handleDeleteInvitation = async (invitationId) => {
+    try {
+      await deleteInvitationAPI(invitationId)
+      dispatch(removeNotification(invitationId))
+    } catch (error) {
+      // Không log ra console trong production để tránh noise
+    }
+  }
+
+  const handleClearAllNotifications = async () => {
+    if (!notifications?.length) return
+
+    setIsClearingAll(true)
+    try {
+      for (const notification of notifications) {
+        await deleteInvitationAPI(notification._id)
+      }
+      dispatch(clearCurrentNotifications())
+    } catch (error) {
+      // Không log ra console trong production để tránh noise
+    } finally {
+      setIsClearingAll(false)
+    }
+  }
+
   // Cập nhật trạng thái của invitation
   const updateBoardInvitation = (status, invitationId) => {
-    console.log('status: ', status)
-    console.log('invitationId: ', invitationId)
+    // console.log('status: ', status)
+    // console.log('invitationId: ', invitationId)
     dispatch(updateBoardInvitationAPI({ status, invitationId }))
       .then(res => {
         if (res.payload.boardInvitation.status === BOARD_INVITATION_STATUS.ACCEPTED) {
@@ -113,6 +141,18 @@ function Notifications() {
         onClose={handleClose}
         MenuListProps={{ 'aria-labelledby': 'basic-button-open-notification' }}
       >
+        {notifications?.length > 0 && (
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', px: 2, pt: 1 }}>
+            <Button
+              size="small"
+              color="inherit"
+              onClick={handleClearAllNotifications}
+              disabled={isClearingAll}
+            >
+              {isClearingAll ? 'Clearing...' : 'Clear all'}
+            </Button>
+          </Box>
+        )}
         {(!notifications || notifications.length === 0) && <MenuItem sx={{ minWidth: 200 }}>You do not have any new notifications.</MenuItem>}
         {notifications?.map((notification, index) =>
           <Box key={index}>
@@ -160,11 +200,21 @@ function Notifications() {
                   <Chip icon={<NotInterestedIcon />} label="Rejected" size="small" />}
                 </Box>
 
-                {/* Thời gian của thông báo */}
-                <Box sx={{ textAlign: 'right' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
                   <Typography variant="span" sx={{ fontSize: '13px' }}>
                     {moment(notification.createdAt).format('llll')}
                   </Typography>
+                  <Button
+                    className="interceptor-loading"
+                    type="submit"
+                    variant="contained"
+                    color="error"
+                    size="small"
+                    sx={{ minWidth: 'auto', p: 0.5, color: 'text.secondary' }}
+                    onClick={() => handleDeleteInvitation(notification._id)}
+                  >
+                    Delete
+                  </Button>
                 </Box>
               </Box>
             </MenuItem>

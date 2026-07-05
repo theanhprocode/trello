@@ -30,7 +30,7 @@ export const notificationsSlice = createSlice({
   reducers: {
     // các action đồng bộ
     clearCurrentNotifications: (state) => {
-      state.currentNotifications = null
+      state.currentNotifications = []
     },
     updateCurrentNotifications: (state, action) => {
       state.currentNotifications = action.payload
@@ -39,6 +39,11 @@ export const notificationsSlice = createSlice({
       const incomingInvitations = action.payload
       // unshift là thêm phần tử vào đầu mảng
       state.currentNotifications.unshift(incomingInvitations)
+    },
+    removeNotification: (state, action) => {
+      state.currentNotifications = (state.currentNotifications || []).filter(
+        (notification) => notification._id !== action.payload
+      )
     }
 
   },
@@ -60,7 +65,8 @@ export const notificationsSlice = createSlice({
 export const {
   clearCurrentNotifications,
   updateCurrentNotifications,
-  addNotifications
+  addNotifications,
+  removeNotification
 } = notificationsSlice.actions
 
 export const selectCurrentNotifications = (state) => state.notifications.currentNotifications
